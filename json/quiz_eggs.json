@@ -18,5 +18,36 @@
             "Over Hard"
         ],
         "correct_answer": "Over Hard"
+    },
+    "3": {
+        "question": "What visual cue tells you it's time to flip an Over Easy egg?",
+        "options": [
+            "When the yolk turns white",
+            "When the whites are opaque",
+            "When the yolk is firm",
+            "When the whites are still runny"
+        ],
+        "correct_answer": "When the whites are opaque"
+    },
+    "4": {
+        "question": "How long should you cook an Over Medium egg per side?",
+        "options": [
+            "1 minute",
+            "2 minutes",
+            "3 minutes",
+            "4 minutes"
+        ],
+        "correct_answer": "2 minutes"
+    },
+    "5": {
+        "question": "Which of the following best describes an Over Medium egg?",
+        "options": [
+            "Set whites and jammy yolk",
+            "Runny yolk, unflipped",
+            "Fully cooked yolk, no flip",
+            "Whites still clear"
+        ],
+        "correct_answer": "Set whites and jammy yolk"
     }
+
 }

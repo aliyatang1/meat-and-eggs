@@ -18,5 +18,36 @@
             "10+ minutes"
         ],
         "correct_answer": "6\u20137 minutes"
+    },
+    "3": {
+        "question": "Which doneness level has a warm pink center and is moderately firm and juicy?",
+        "options": [
+            "Rare",
+            "Medium",
+            "Medium Well",
+            "Well Done"
+        ],
+        "correct_answer": "Medium"
+    },
+    "4": {
+        "question": "Which of the following best describes a Rare steak?",
+        "options": [
+            "Slight hint of pink in the center, firm and slightly juicy",
+            "Warm red-pink center, tender and juicy",
+            "Cool red center, very soft and moist",
+            "Warm pink center, moderately firm, juicy"
+        ],
+        "correct_answer": "Cool red center, very soft and moist"
+    },
+    "5": {
+        "question": "How long per side should you cook a Medium Well steak?",
+        "options": [
+            "2\u20133 minutes",
+            "3\u20134 minutes",
+            "4\u20135 minutes",
+            "5\u20136 minutes"
+        ],
+        "correct_answer": "5\u20136 minutes"
     }
+
 }
