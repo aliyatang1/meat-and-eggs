@@ -1,0 +1,22 @@
+{
+    "1": {
+        "question": "Which egg style has a runny yolk and is not flipped?",
+        "options": [
+            "Sunny Side Up",
+            "Over Easy",
+            "Over Medium",
+            "Over Hard"
+        ],
+        "correct_answer": "Sunny Side Up"
+    },
+    "2": {
+        "question": "Which egg style has a firm yolk and requires flipping?",
+        "options": [
+            "Sunny Side Up",
+            "Over Easy",
+            "Over Medium",
+            "Over Hard"
+        ],
+        "correct_answer": "Over Hard"
+    }
+}

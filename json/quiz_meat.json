@@ -1,0 +1,22 @@
+{
+    "1": {
+        "question": "What temperature is Medium Rare steak cooked to?",
+        "options": [
+            "125\u00b0F",
+            "135\u00b0F",
+            "145\u00b0F",
+            "160\u00b0F"
+        ],
+        "correct_answer": "135\u00b0F"
+    },
+    "2": {
+        "question": "How many minutes per side do you need to cook a Well Done steak?",
+        "options": [
+            "6\u20137 minutes",
+            "3\u20134 minutes",
+            "2\u20133 minutes",
+            "10+ minutes"
+        ],
+        "correct_answer": "6\u20137 minutes"
+    }
+}
