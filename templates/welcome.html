@@ -1,4 +1,14 @@
 {% extends "layout.html" %}
+
 {% block content %}
-  <h1>Welcome to the Cooking App</h1>
+  <h1>Welcome to Meat and Eggs!</h1>
+  <p>Start learning about how to cook steak and eggs, then test your knowledge!</p>
+
+  <a href="/learn/1">
+    <button class="btn btn-primary">Start Learning</button>
+  </a>
+
+  <a href="/quiz/meat/1">
+    <button class="btn btn-success">Start Quiz</button>
+  </a>
 {% endblock %}
