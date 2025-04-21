@@ -1,0 +1,54 @@
+{
+    "lessons": [],
+    "quiz_answers": [
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "125\u00b0F",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "135\u00b0F",
+            "correct": true
+        },
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "145\u00b0F",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "135\u00b0F",
+            "correct": true
+        },
+        {
+            "topic": "meat",
+            "question_id": 2,
+            "answer": "3\u20134 minutes",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 2,
+            "answer": "2\u20133 minutes",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 2,
+            "answer": "10+ minutes",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 2,
+            "answer": "6\u20137 minutes",
+            "correct": true
+        }
+    ],
+    "simulator_actions": []
+}

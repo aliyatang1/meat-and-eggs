@@ -13,7 +13,7 @@ user_logs = {
 
 #logs info about time, correctness, etc. onto log.json
 def load_json(filename):
-    with open(os.path.join('json', filename), 'r') as f:
+    with open(os.path.join('static', 'json', filename), 'r') as f:
         return json.load(f)
 
 # Helper function to save logs to log.json
@@ -53,7 +53,14 @@ def quiz(topic, question_id):
         ])
         return render_template('results.html', score=correct_count)
 
-    return render_template('quiz.html', question=question, question_id=question_id, topic=topic)
+    return render_template(
+    'quiz.html',
+    topic=topic,
+    question_id=question_id,
+    question=question,
+    total_questions=len(quiz_data)
+)
+
 
 #retrieves the quiz answers for the user
 @app.route('/submit_answer', methods=['POST'])

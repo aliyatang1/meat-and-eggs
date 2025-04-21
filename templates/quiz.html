@@ -2,13 +2,19 @@
 
 {% block content %}
 <div class="quiz-container">
-    <div class="progress">Question <span id="current-q">1</span> of <span id="total-qs">5</span></div>
+    <div class="progress">Question <span id="current-q">{{ question_id }}</span> of {{ total_questions }}</div>
     <div class="question-box">
-        <div class="question" id="question-text">Loading question...</div>
+        <div class="question" id="question-text">{{ question.question }}</div>
     </div>
-    <div class="options" id="options-container"></div>
+    <div class="options" id="options-container">
+        {% for option in question.options %}
+            <button class="option-btn" onclick="checkAnswer('{{ option }}')">{{ option }}</button>
+        {% endfor %}
+    </div>
     <div class="feedback" id="feedback"></div>
-    <button id="next-btn" class="next-btn">Next →</button>
+    <form method="GET" action="/quiz/{{ topic }}/{{ question_id + 1 }}">
+        <button id="next-btn" class="next-btn" type="submit" style="display: none;">Next →</button>
+    </form>
 </div>
 {% endblock %}
 
@@ -63,7 +69,6 @@
         color: #721c24;
     }
     .next-btn {
-        display: none;
         margin-top: 20px;
         background-color: #007BFF;
         color: white;
@@ -81,66 +86,33 @@
 <script>
     const topic = "{{ topic }}";
     const questionId = {{ question_id }};
-    const quizData = {{ question | tojson }};
+    const correctAnswer = "{{ question.correct_answer }}";
 
-    document.addEventListener("DOMContentLoaded", function () {
-        displayQuestion();
+    function checkAnswer(selectedOption) {
+        const feedbackDiv = document.getElementById('feedback');
+        const nextBtn = document.getElementById('next-btn');
 
-        function displayQuestion() {
-            const questionText = document.getElementById('question-text');
-            const optionsContainer = document.getElementById('options-container');
-            const feedbackDiv = document.getElementById('feedback');
-            const nextBtn = document.getElementById('next-btn');
-
-            document.getElementById('current-q').textContent = questionId;
-            document.getElementById('total-qs').textContent = Object.keys(quizData).length;
-
-            questionText.textContent = quizData.question;
-            optionsContainer.innerHTML = '';
-            feedbackDiv.style.display = 'none';
-            nextBtn.style.display = 'none';
-
-            quizData.options.forEach(option => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.textContent = option;
-                btn.onclick = () => checkAnswer(option);
-                optionsContainer.appendChild(btn);
-            });
+        if (selectedOption === correctAnswer) {
+            feedbackDiv.textContent = "Correct!";
+            feedbackDiv.className = 'feedback correct';
+        } else {
+            feedbackDiv.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
+            feedbackDiv.className = 'feedback incorrect';
         }
 
-        function checkAnswer(selectedOption) {
-            const correct = selectedOption === quizData.correct_answer;
-            const feedbackDiv = document.getElementById('feedback');
-            const nextBtn = document.getElementById('next-btn');
+        feedbackDiv.style.display = 'block';
+        nextBtn.style.display = 'inline-block';
 
-            if (correct) {
-                feedbackDiv.textContent = "Correct!";
-                feedbackDiv.className = 'feedback correct';
-            } else {
-                feedbackDiv.textContent = `Incorrect. The correct answer is: ${quizData.correct_answer}`;
-                feedbackDiv.className = 'feedback incorrect';
-            }
-
-            feedbackDiv.style.display = 'block';
-            nextBtn.style.display = 'inline-block';
-
-            fetch('/submit_answer', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    topic: topic,
-                    question_id: questionId,
-                    answer: selectedOption,
-                    correct: correct
-                })
-            });
-        }
-
-        document.getElementById('next-btn').addEventListener('click', () => {
-            const nextId = questionId + 1;
-            window.location.href = `/quiz/${topic}/${nextId}`;
+        fetch('/submit_answer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                topic: topic,
+                question_id: questionId,
+                answer: selectedOption,
+                correct: selectedOption === correctAnswer
+            })
         });
-    });
+    }
 </script>
 {% endblock %}
