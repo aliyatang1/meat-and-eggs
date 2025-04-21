@@ -3,7 +3,7 @@ import os
 import json
 from datetime import datetime
 
-app = Flask(__name__, template_folder='.')
+app = Flask(__name__)
 
 user_logs = {
     "lessons": [],

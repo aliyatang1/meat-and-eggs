@@ -1,174 +1,146 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .quiz-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .question-box {
-            border: 2px solid #007BFF;
-            border-radius: 6px;
-            padding: 15px;
-            margin: 20px 0;
-            background-color: #e9f2ff;
-        }
-        .question {
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .option-btn {
-            padding: 10px 15px;
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: left;
-            transition: background-color 0.3s;
-        }
-        .option-btn:hover {
-            background-color: #e0e0e0;
-        }
-        .feedback {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 4px;
-            display: none;
-        }
-        .correct {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .incorrect {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        .next-btn {
-            display: none;
-            margin-top: 20px;
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            font-size: 1em;
-            cursor: pointer;
-        }
-        .next-btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <div class="quiz-container">
-        <div class="progress">Question <span id="current-q">1</span> of <span id="total-qs">5</span></div>
-        <div class="question-box">
-            <div class="question" id="question-text">Loading question...</div>
-        </div>
-        <div class="options" id="options-container"></div>
-        <div class="feedback" id="feedback"></div>
-        <button id="next-btn" class="next-btn">Next → </button>
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="quiz-container">
+    <div class="progress">Question <span id="current-q">1</span> of <span id="total-qs">5</span></div>
+    <div class="question-box">
+        <div class="question" id="question-text">Loading question...</div>
     </div>
+    <div class="options" id="options-container"></div>
+    <div class="feedback" id="feedback"></div>
+    <button id="next-btn" class="next-btn">Next →</button>
+</div>
+{% endblock %}
 
-    <script>
-        let topic = new URLSearchParams(window.location.search).get("topic") || "eggs";
-        let currentQuestionId = parseInt(new URLSearchParams(window.location.search).get("question")) || 1;
-        let quizData = {};
+{% block scripts %}
+<style>
+    .quiz-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .question-box {
+        border: 2px solid #007BFF;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 20px 0;
+        background-color: #e9f2ff;
+    }
+    .question {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+    .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .option-btn {
+        padding: 10px 15px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: left;
+        transition: background-color 0.3s;
+    }
+    .option-btn:hover {
+        background-color: #e0e0e0;
+    }
+    .feedback {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        display: none;
+    }
+    .correct {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .incorrect {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    .next-btn {
+        display: none;
+        margin-top: 20px;
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 1em;
+        cursor: pointer;
+    }
+    .next-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
 
-        async function loadQuizData() {
-            try {
-                const response = await fetch(`/static/json/quiz_${topic}.json`);
-                if (!response.ok) throw new Error("Failed to load quiz data");
+<script>
+    const topic = "{{ topic }}";
+    const questionId = {{ question_id }};
+    const quizData = {{ question | tojson }};
 
-                quizData = await response.json();
-                displayQuestion();
-            } catch (error) {
-                document.getElementById('question-text').textContent = `Error: ${error.message}`;
-            }
-        }
+    document.addEventListener("DOMContentLoaded", function () {
+        displayQuestion();
 
         function displayQuestion() {
-            const questionData = quizData[currentQuestionId];
-            if (!questionData) {
-                window.location.href = `quiz_complete.html?topic=${topic}`;
-                return;
-            }
+            const questionText = document.getElementById('question-text');
+            const optionsContainer = document.getElementById('options-container');
+            const feedbackDiv = document.getElementById('feedback');
+            const nextBtn = document.getElementById('next-btn');
 
-            document.getElementById('question-text').textContent = questionData.question;
-            document.getElementById('current-q').textContent = currentQuestionId;
+            document.getElementById('current-q').textContent = questionId;
             document.getElementById('total-qs').textContent = Object.keys(quizData).length;
 
-            const optionsContainer = document.getElementById('options-container');
+            questionText.textContent = quizData.question;
             optionsContainer.innerHTML = '';
-            document.getElementById('feedback').style.display = 'none';
-            document.getElementById('next-btn').style.display = 'none';
+            feedbackDiv.style.display = 'none';
+            nextBtn.style.display = 'none';
 
-            questionData.options.forEach(option => {
-                const button = document.createElement('button');
-                button.className = 'option-btn';
-                button.textContent = option;
-                button.addEventListener('click', () => checkAnswer(option));
-                optionsContainer.appendChild(button);
+            quizData.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(option);
+                optionsContainer.appendChild(btn);
             });
         }
 
-        async function checkAnswer(selectedOption) {
-            const questionData = quizData[currentQuestionId];
+        function checkAnswer(selectedOption) {
+            const correct = selectedOption === quizData.correct_answer;
             const feedbackDiv = document.getElementById('feedback');
+            const nextBtn = document.getElementById('next-btn');
 
-            if (selectedOption === questionData.correct_answer) {
-                feedbackDiv.textContent = 'Correct!';
+            if (correct) {
+                feedbackDiv.textContent = "Correct!";
                 feedbackDiv.className = 'feedback correct';
             } else {
-                feedbackDiv.textContent = `Incorrect. The correct answer is: ${questionData.correct_answer}`;
+                feedbackDiv.textContent = `Incorrect. The correct answer is: ${quizData.correct_answer}`;
                 feedbackDiv.className = 'feedback incorrect';
             }
 
             feedbackDiv.style.display = 'block';
-            document.getElementById('next-btn').style.display = 'inline-block';
+            nextBtn.style.display = 'inline-block';
 
-            try {
-                await fetch('/submit_answer', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        topic: topic,
-                        question_id: currentQuestionId,
-                        selected_answer: selectedOption,
-                        is_correct: selectedOption === questionData.correct_answer
-                    })
-                });
-            } catch (error) {
-                console.error('Error submitting answer:', error);
-            }
+            fetch('/submit_answer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    topic: topic,
+                    question_id: questionId,
+                    answer: selectedOption,
+                    correct: correct
+                })
+            });
         }
 
         document.getElementById('next-btn').addEventListener('click', () => {
-            currentQuestionId++;
-            if (currentQuestionId <= Object.keys(quizData).length) {
-                window.location.href = `quiz.html?topic=${topic}&question=${currentQuestionId}`;
-            } else {
-                window.location.href = `quiz_complete.html?topic=${topic}`;
-            }
+            const nextId = questionId + 1;
+            window.location.href = `/quiz/${topic}/${nextId}`;
         });
-
-        loadQuizData();
-    </script>
-</body>
-</html>
+    });
+</script>
+{% endblock %}
