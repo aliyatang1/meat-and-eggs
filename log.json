@@ -1,6 +1,49 @@
 {
-    "lessons": [],
+    "lessons": [
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T10:30:14.794725"
+        },
+        {
+            "lesson_id": 2,
+            "timestamp": "2025-04-22T10:30:19.776330"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T10:30:51.115921"
+        }
+    ],
     "quiz_answers": [
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "160\u00b0F",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 2,
+            "answer": "2\u20133 minutes",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 3,
+            "answer": "Medium Well",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 4,
+            "answer": "Warm pink center, moderately firm, juicy",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 5,
+            "answer": "4\u20135 minutes",
+            "correct": null
+        },
         {
             "topic": "meat",
             "question_id": 1,
@@ -10,55 +53,43 @@
         {
             "topic": "meat",
             "question_id": 2,
-            "answer": "3\u20134 minutes",
+            "answer": "2\u20133 minutes",
             "correct": null
         },
         {
             "topic": "meat",
             "question_id": 3,
-            "answer": "Well Done",
-            "correct": null
-        },
-        {
-            "topic": "meat",
-            "question_id": 4,
-            "answer": "Warm pink center, moderately firm, juicy",
-            "correct": null
-        },
-        {
-            "topic": "meat",
-            "question_id": 5,
-            "answer": "5\u20136 minutes",
+            "answer": "Medium Well",
             "correct": null
         },
         {
             "topic": "meat",
             "question_id": 1,
-            "answer": "145\u00b0F",
+            "answer": "135\u00b0F",
             "correct": null
         },
         {
             "topic": "meat",
             "question_id": 2,
-            "answer": "10+ minutes",
+            "answer": "2\u20133 minutes",
             "correct": null
         },
         {
             "topic": "meat",
             "question_id": 3,
-            "answer": "Well Done",
+            "answer": "Medium",
             "correct": null
         },
         {
             "topic": "meat",
             "question_id": 4,
-            "answer": "Warm pink center, moderately firm, juicy",
+            "answer": "Cool red center, very soft and moist",
             "correct": null
         },
         {
             "topic": "meat",
             "question_id": 5,
-            "answer": "5\u20136 minutes",
+            "answer": "3\u20134 minutes",
             "correct": null
         }
     ],

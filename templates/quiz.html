@@ -2,7 +2,12 @@
 
 {% block content %}
 <div class="quiz-container">
-    <div class="progress">Question <span id="current-q">{{ question_id }}</span> of {{ total_questions }}</div>
+    <div class="progress">
+        <span>Question</span>
+        <span id="current-q">{{ question_id }}</span>
+        <span>of</span>
+        <span id="total-qs">{{ total_questions }}</span>
+      </div>      
     <div class="question-box">
         <div class="question" id="question-text">{{ question.question }}</div>
     </div>
