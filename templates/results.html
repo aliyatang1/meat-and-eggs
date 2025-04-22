@@ -1,4 +1,117 @@
 {% extends "layout.html" %}
-{% block content %}
 
+{% block content %}
+<div class="results-container">
+    <h1>Quiz Results</h1>
+    <div class="score-card">
+        <h2>Your Score</h2>
+        <div class="score-display">
+            <span class="correct-answers">{{ correct_count }}</span> out of 
+            <span class="total-questions">5</span> correct
+        </div>
+        <div class="percentage">
+            {{ (correct_count / 5 * 100) | round | int }}%
+        </div>
+    </div>
+    
+    <div class="feedback">
+        {% if correct_count == 5 %}
+        <p class="excellent">Perfect score! 🎉 You're a quiz master!</p>
+        {% elif correct_count >= 3 %}
+        <p class="good">Good job! 👍 You know your stuff!</p>
+        {% else %}
+        <p class="improve">Keep practicing! You'll get better! 📚</p>
+        {% endif %}
+    </div>
+    
+    <a href="/quiz/{{ topic }}/1" class="retake-btn">Retake Quiz</a>
+    <a href="/" class="home-btn">Back to Home</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+    .results-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .score-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+    
+    .score-display {
+        font-size: 1.5em;
+        margin: 15px 0;
+    }
+    
+    .correct-answers {
+        color: #28a745;
+        font-weight: bold;
+        font-size: 1.8em;
+    }
+    
+    .total-questions {
+        font-weight: bold;
+    }
+    
+    .percentage {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #007BFF;
+        margin: 10px 0;
+    }
+    
+    .feedback {
+        margin: 20px 0;
+        font-size: 1.2em;
+    }
+    
+    .excellent {
+        color: #28a745;
+    }
+    
+    .good {
+        color: #17a2b8;
+    }
+    
+    .improve {
+        color: #ffc107;
+    }
+    
+    .retake-btn, .home-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    
+    .retake-btn {
+        background-color: #007BFF;
+        color: white;
+    }
+    
+    .retake-btn:hover {
+        background-color: #0056b3;
+    }
+    
+    .home-btn {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    .home-btn:hover {
+        background-color: #5a6268;
+    }
+</style>
 {% endblock %}
