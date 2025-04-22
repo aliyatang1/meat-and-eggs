@@ -1,4 +1,67 @@
 {% extends "layout.html" %}
-{% block content %}
 
+{% block content %}
+  <h2>{{ lesson.title }}</h2>
+
+  <!-- Lesson selection dropdown -->
+  <div class="dropdown mb-4">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="lessonDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Select a Lesson
+    </button>
+    <div class="dropdown-menu" aria-labelledby="lessonDropdown">
+      <a class="dropdown-item" href="{{ url_for('learn', lesson_id=1) }}">🥩 Steak</a>
+      <a class="dropdown-item" href="{{ url_for('learn', lesson_id=2) }}">🍳 Eggs</a>
+    </div>
+  </div>
+
+  <!-- Steak Lesson Table -->
+  {% if lesson.title == "Levels of Doneness: Steak" %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Level</th>
+          <th>Temperature</th>
+          <th>Time</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in lesson.content %}
+        <tr>
+          <td>{{ item.level }}</td>
+          <td>{{ item.temp }}</td>
+          <td>{{ item.time }}</td>
+          <td>{{ item.description }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="/simulator/steak" class="btn btn-success mt-3">Start Steak Simulator</a>
+
+  <!-- Egg Lesson Table -->
+  {% else %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Style</th>
+          <th>Heat</th>
+          <th>Time</th>
+          <th>Flip</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in lesson.content %}
+        <tr>
+          <td>{{ item.style }}</td>
+          <td>{{ item.heat }}</td>
+          <td>{{ item.time }}</td>
+          <td>{{ item.flip }}</td>
+          <td>{{ item.description }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="/simulator/eggs" class="btn btn-success mt-3">Start Egg Simulator</a>
+  {% endif %}
 {% endblock %}

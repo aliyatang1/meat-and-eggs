@@ -81,6 +81,16 @@ def submit_answer():
     save_user_logs()
     return jsonify(success=True)
 
+#retrieves the simulators
+@app.route('/simulator/<type>')
+def simulator(type):
+    if type == 'steak':
+        return render_template('steak_simulator.html')
+    elif type == 'eggs':
+        return render_template('egg_simulator.html')
+    else:
+        return "Simulator not found", 404
+
 #retrieves info about simulator actions to save onto log.json
 @app.route('/log_action', methods=['POST'])
 def log_action():
