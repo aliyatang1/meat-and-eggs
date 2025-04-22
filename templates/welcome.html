@@ -1,14 +1,30 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>Welcome to Meat and Eggs!</h1>
-  <p>Start learning about how to cook steak and eggs, then test your knowledge!</p>
+  <div class="text-center">
+    <h1 class="page-title mb-4">Learn How to Cook Proteins 🥩🥚</h1>
+  </div>
 
-  <a href="/learn/1">
-    <button class="btn btn-primary">Start Learning</button>
-  </a>
-
-  <a href="/quiz/meat/1">
-    <button class="btn btn-success">Start Quiz</button>
-  </a>
+  <div class="row justify-content-center gap-row mb-5">
+    <!-- Steak Section -->
+    <div class="col-md-4 mb-5 text-center">
+      <a href="{{ url_for('learn', lesson_id=1) }}">
+        <button class="btn btn-success btn-lg learn-btn">Learn About Steak!</button>
+      </a>
+      <div>
+        <img src="{{ url_for('static', filename='images/home-steak.webp') }}" alt="Steak" class="img-fluid rounded home-image" style="max-height: 250px;">
+      </div>
+    </div>
+  
+    <!-- Eggs Section -->
+    <div class="col-md-4 mb-5 text-center">
+      <a href="{{ url_for('learn', lesson_id=2) }}">
+        <button class="btn btn-success btn-lg learn-btn">Learn About Eggs!</button>
+      </a>
+      <div>
+        <img src="{{ url_for('static', filename='images/home-eggs.webp') }}" alt="Eggs" class="img-fluid rounded home-image" style="max-height: 250px;">
+      </div>
+    </div>
+  </div>
+  
 {% endblock %}

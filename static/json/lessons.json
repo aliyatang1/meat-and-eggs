@@ -1,70 +1,79 @@
 {
     "1": {
-        "title": "Levels of Doneness: Steak",
-        "content": [
-            {
-                "level": "Rare",
-                "temp": "125\u00b0F",
-                "time": "2\u20133 minutes per side",
-                "description": "Cool red center, very soft and moist."
-            },
-            {
-                "level": "Medium Rare",
-                "temp": "135\u00b0F",
-                "time": "3\u20134 minutes per side",
-                "description": "Warm red-pink center, tender and juicy."
-            },
-            {
-                "level": "Medium",
-                "temp": "140\u00b0F",
-                "time": "4\u20135 minutes per side",
-                "description": "Warm pink center, moderately firm, juicy."
-            },
-            {
-                "level": "Medium Well",
-                "temp": "150\u00b0F",
-                "time": "5\u20136 minutes per side",
-                "description": "Slight hint of pink in the center, firm and slightly juicy."
-            },
-            {
-                "level": "Well Done",
-                "temp": "160\u00b0F+",
-                "time": "6\u20137 minutes per side",
-                "description": "No pink, firm, and dry throughout."
-            }
-        ]
-    },
+      "title": "Levels of Doneness: Steak",
+      "content": [
+        {
+          "level": "Well",
+          "temp": "160°F+",
+          "time": "6–7 minutes per side",
+          "description": "No pink, firm, and dry throughout.",
+          "image": "images/steak-well.png"
+        },
+        {
+          "level": "Medium Well",
+          "temp": "150°F",
+          "time": "5–6 minutes per side",
+          "description": "Slight hint of pink in the center, firm and slightly juicy.",
+          "image": "images/steak-mediumwell.png"
+        },
+        {
+          "level": "Medium",
+          "temp": "140°F",
+          "time": "4–5 minutes per side",
+          "description": "Warm pink center, moderately firm, juicy.",
+          "image": "images/steak-medium.png"
+        },
+        {
+          "level": "Medium Rare",
+          "temp": "135°F",
+          "time": "3–4 minutes per side",
+          "description": "Warm red-pink center, tender and juicy.",
+          "image": "images/steak-mediumrare.png"
+        },
+        {
+          "level": "Rare",
+          "temp": "125°F",
+          "time": "2–3 minutes per side",
+          "description": "Cool red center, very soft and moist.",
+          "image": "images/steak-rare.png"
+        }
+      ]
+    },   
     "2": {
         "title": "Levels of Doneness: Eggs",
         "content": [
-            {
-                "style": "Sunny Side Up",
-                "heat": "Medium-Low",
-                "time": "2\u20133 minutes",
-                "flip": "No",
-                "description": "Whites set; yolk runny. Whites turn from clear to solid white."
-            },
-            {
-                "style": "Over Easy",
-                "heat": "Medium",
-                "time": "2 minutes one side, 30\u201360s after flip",
-                "flip": "Yes",
-                "description": "Whites set; yolk runny. Flip when whites are opaque."
-            },
-            {
-                "style": "Over Medium",
-                "heat": "Medium",
-                "time": "2 minutes per side",
-                "flip": "Yes",
-                "description": "Whites set; yolk partially set/jammy."
-            },
-            {
-                "style": "Over Hard",
-                "heat": "Medium",
-                "time": "2\u20133 minutes per side",
-                "flip": "Yes",
-                "description": "Whites and yolks firm. Browning appears on whites."
-            }
+          {
+            "style": "Sunny Side Up",
+            "heat": "Medium-Low",
+            "time": "2–3 minutes",
+            "flip": "No",
+            "description": "Whites set; yolk runny. Whites turn from clear to solid white.",
+            "image": "images/eggs-sunny.webp"
+          },
+          {
+            "style": "Over Easy",
+            "heat": "Medium",
+            "time": "2 minutes one side, 30–60s after flip",
+            "flip": "Yes",
+            "description": "Whites set; yolk runny. Flip when whites are opaque.",
+            "image": "images/eggs-easy.jpg"
+          },
+          {
+            "style": "Over Medium",
+            "heat": "Medium",
+            "time": "2 minutes per side",
+            "flip": "Yes",
+            "description": "Whites set; yolk partially set/jammy.",
+            "image": "images/eggs-medium.jpg"
+          },
+          {
+            "style": "Over Hard",
+            "heat": "Medium",
+            "time": "2–3 minutes per side",
+            "flip": "Yes",
+            "description": "Whites and yolks firm. Browning appears on whites.",
+            "image": "images/eggs-hard.webp"
+          }
         ]
-    }
+      }
 }

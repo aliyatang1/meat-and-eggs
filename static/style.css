@@ -1,0 +1,52 @@
+.navbar-nav .nav-link.nav-hover:hover {
+    color: #000 !important;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  
+  /* Add space between navbar links */
+.navbar-nav .nav-item {
+    margin-right: 30px;
+  }
+
+  /* More spacing around the h1 title */
+.page-title {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+/* More spacing around the images */
+  img {
+    margin-top: 20px;
+}
+
+.steak-cards-wrapper {
+  scroll-snap-type: x mandatory;
+}
+
+.steak-cards-wrapper .card {
+  scroll-snap-align: start;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.steakcard-img-top {
+  aspect-ratio: 7 / 3;
+  width: 100%;
+  object-fit: cover;
+}
+
+.eggcard-img-top{
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  object-fit: cover;
+  margin-top: 0;
+}
+
+h2{
+  display: inline;
+}
+
+.simulator-link {
+  position: absolute;
+  right: 15px;
+}

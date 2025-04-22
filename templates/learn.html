@@ -1,67 +1,69 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h2>{{ lesson.title }}</h2>
-
-  <!-- Lesson selection dropdown -->
-  <div class="dropdown mb-4">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="lessonDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Select a Lesson
-    </button>
-    <div class="dropdown-menu" aria-labelledby="lessonDropdown">
-      <a class="dropdown-item" href="{{ url_for('learn', lesson_id=1) }}">🥩 Steak</a>
-      <a class="dropdown-item" href="{{ url_for('learn', lesson_id=2) }}">🍳 Eggs</a>
-    </div>
+  <!-- Lesson Switch Buttons -->
+  <div class="text-center mb-4">
+    <a href="{{ url_for('learn', lesson_id=1) }}" class="btn btn-outline-primary mx-2 {% if lesson.title == 'Levels of Doneness: Steak' %}active{% endif %}">🥩 Steak</a>
+    <a href="{{ url_for('learn', lesson_id=2) }}" class="btn btn-outline-primary mx-2 {% if lesson.title == 'Levels of Doneness: Eggs' %}active{% endif %}">🍳 Eggs</a>
   </div>
+
 
   <!-- Steak Lesson Table -->
   {% if lesson.title == "Levels of Doneness: Steak" %}
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Level</th>
-          <th>Temperature</th>
-          <th>Time</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in lesson.content %}
-        <tr>
-          <td>{{ item.level }}</td>
-          <td>{{ item.temp }}</td>
-          <td>{{ item.time }}</td>
-          <td>{{ item.description }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <a href="/simulator/steak" class="btn btn-success mt-3">Start Steak Simulator</a>
+  <div class="position-relative text-center py-3 mb-4">
+    <h2 class="display-5 font-weight-bold d-inline-block mb-0">Levels of Doneness: Steak</h2>
+    <a href="/simulator/steak" class="btn btn-success simulator-link">Try the Steak Simulator!</a>
+  </div>
+
+  <!-- Horizontal Scrollable Card Row -->
+  
+  <div class="d-flex overflow-auto px-3 pb-4 steak-cards-wrapper">
+    {% for item in lesson.content %}
+    <div class="card mx-3 flex-shrink-0" style="width: 280px;">
+      <img src="{{ url_for('static', filename=item.image) }}" class="steakcard-img-top" alt="{{ item.level }}">
+      <div class="card-body">
+        <h5 class="card-title font-weight-bold">{{ item.level }}</h5>
+        <p class="card-text mb-1"><strong>{{ item.temp }}</strong> for <strong>{{ item.time }}</strong></p>
+        <p class="card-text">{{ item.description }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- <div class="text-center mt-5">
+    <a href="/simulator/steak" class="btn btn-success btn-lg">Try the Steak Simulator!</a>
+  </div> -->
 
   <!-- Egg Lesson Table -->
   {% else %}
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Style</th>
-          <th>Heat</th>
-          <th>Time</th>
-          <th>Flip</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in lesson.content %}
-        <tr>
-          <td>{{ item.style }}</td>
-          <td>{{ item.heat }}</td>
-          <td>{{ item.time }}</td>
-          <td>{{ item.flip }}</td>
-          <td>{{ item.description }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <a href="/simulator/eggs" class="btn btn-success mt-3">Start Egg Simulator</a>
-  {% endif %}
+  <div class="position-relative text-center py-3 mb-4">
+    <h2 class="display-5 font-weight-bold d-inline-block mb-0">Levels of Doneness: Eggs</h2>
+    <a href="/simulator/eggs" class="btn btn-success simulator-link">Try the Egg Simulator!</a>
+  </div>
+  
+  
+  
+
+  <div class="container">
+    <div class="row justify-content-center">
+      {% for item in lesson.content %}
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100 shadow">
+          <!-- Image at the top of the card -->
+          <img src="{{ url_for('static', filename=item.image) }}" class="eggcard-img-top" alt="{{ item.style }}">
+
+          <div class="card-body text-center">
+            <h5 class="card-title font-weight-bold">{{ item.style }}</h5>
+            <p class="card-text mb-1"><strong>Heat:</strong> {{ item.heat }}</p>
+            <p class="card-text mb-1"><strong>Time:</strong> {{ item.time }}</p>
+            <p class="card-text mb-1"><strong>Flip:</strong> {{ item.flip }}</p>
+            <p class="card-text"><strong>Description:</strong> {{ item.description }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+{% endif %}
 {% endblock %}
