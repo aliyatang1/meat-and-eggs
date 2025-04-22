@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 import os
 import json
 from datetime import datetime
@@ -60,6 +60,17 @@ def quiz(topic, question_id):
     question=question,
     total_questions=len(quiz_data)
 )
+
+@app.route('/results/<topic>')
+def show_results(topic):
+    # Get the user's score from the session or database
+    correct_count = session.get(f'{topic}_correct', 0)  # Assuming you stored it in session
+    total_questions = 5
+    
+    return render_template('results.html', 
+                         topic=topic,
+                         correct_count=correct_count,
+                         total_questions=total_questions)
 
 
 #retrieves the quiz answers for the user
