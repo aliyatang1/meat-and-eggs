@@ -42,7 +42,7 @@
   margin-top: 0;
 }
 
-h2{
+.levels{
   display: inline;
 }
 
@@ -57,4 +57,42 @@ h2{
 .progress span {
   margin-right: 6px;
   font-weight: 500;
+}
+
+
+
+.simulator-wrapper {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  transform: translateX(70px); /* nudge to the right */
+}
+
+#resultContainer {
+  max-width: 600px;  /* Or try 500px, 400px — adjust as needed */
+  margin: 1.5rem auto;
+  text-align: center;
+}
+
+
+
+.pan-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.steak-img {
+  position: absolute;
+  top: 45%;
+  left: 37%; /* move it slightly left */
+  transform: translate(-50%, -50%);
+  width: 45%;
+  pointer-events: none;
+}
+
+#cook{
+  padding-top: 30px;
 }

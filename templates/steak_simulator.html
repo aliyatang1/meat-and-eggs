@@ -1,4 +1,25 @@
 {% extends "layout.html" %}
+
 {% block content %}
-  <h2>Steak Simulator</h2>
+<div class="text-center mt-4">
+  <h2 id="cook">Cook your steak to: <span id="targetDoneness" class="text-primary"></span></h2>
+  <h5 class="mt-2 text-muted" id="cookingTimerWrapper">Time: <span id="cookingTimer">0 min</span></h5>
+  <button id="startBtn" class="btn btn-primary btn-lg mt-3">Start Cooking</button>
+</div>
+
+<div class="text-center mt-4" id="resultContainer" style="display: none;">
+  <h4 id="resultMsg"></h4>
+  <div class="mt-3">
+    <a href="/simulator/steak" class="btn btn-outline-primary">Play Again</a>
+    <a href="/quiz/meat/1" class="btn btn-success">Take the Steak Quiz</a>
+  </div>
+</div>
+
+<div class="simulator-wrapper mt-4">
+  <img src="{{ url_for('static', filename='images/pan.png') }}" class="pan-img" alt="Pan">
+  <img id="steakImage" src="{{ url_for('static', filename='images/steaksim-raw.png') }}" class="steak-img" alt="Steak">
+</div>
+
+
+<script src="{{ url_for('static', filename='steak_simulator.js') }}"></script>
 {% endblock %}

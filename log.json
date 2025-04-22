@@ -2,70 +2,82 @@
     "lessons": [
         {
             "lesson_id": 1,
-            "timestamp": "2025-04-22T10:30:14.794725"
+            "timestamp": "2025-04-22T17:39:40.709658"
         },
         {
             "lesson_id": 2,
-            "timestamp": "2025-04-22T10:30:19.776330"
+            "timestamp": "2025-04-22T17:39:43.444880"
         },
         {
             "lesson_id": 1,
-            "timestamp": "2025-04-22T10:30:51.115921"
+            "timestamp": "2025-04-22T17:39:46.069177"
+        },
+        {
+            "lesson_id": 2,
+            "timestamp": "2025-04-22T17:39:46.615989"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T17:39:47.448484"
+        },
+        {
+            "lesson_id": 2,
+            "timestamp": "2025-04-22T17:39:47.915391"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T17:40:23.502547"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T17:40:26.050985"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T18:02:01.087228"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T18:15:09.995604"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T18:15:45.462434"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T18:15:45.996618"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T18:15:46.898638"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T18:15:57.621125"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T18:56:58.105637"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T18:57:02.194763"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T18:57:40.555183"
+        },
+        {
+            "lesson_id": 1,
+            "timestamp": "2025-04-22T18:57:44.739703"
         }
     ],
     "quiz_answers": [
         {
             "topic": "meat",
             "question_id": 1,
-            "answer": "160\u00b0F",
-            "correct": null
-        },
-        {
-            "topic": "meat",
-            "question_id": 2,
-            "answer": "2\u20133 minutes",
-            "correct": null
-        },
-        {
-            "topic": "meat",
-            "question_id": 3,
-            "answer": "Medium Well",
-            "correct": null
-        },
-        {
-            "topic": "meat",
-            "question_id": 4,
-            "answer": "Warm pink center, moderately firm, juicy",
-            "correct": null
-        },
-        {
-            "topic": "meat",
-            "question_id": 5,
-            "answer": "4\u20135 minutes",
-            "correct": null
-        },
-        {
-            "topic": "meat",
-            "question_id": 1,
             "answer": "125\u00b0F",
-            "correct": null
-        },
-        {
-            "topic": "meat",
-            "question_id": 2,
-            "answer": "2\u20133 minutes",
-            "correct": null
-        },
-        {
-            "topic": "meat",
-            "question_id": 3,
-            "answer": "Medium Well",
-            "correct": null
-        },
-        {
-            "topic": "meat",
-            "question_id": 1,
-            "answer": "135\u00b0F",
             "correct": null
         },
         {
@@ -83,7 +95,7 @@
         {
             "topic": "meat",
             "question_id": 4,
-            "answer": "Cool red center, very soft and moist",
+            "answer": "Warm red-pink center, tender and juicy",
             "correct": null
         },
         {
