@@ -8,13 +8,22 @@
     </div>
     <div class="options" id="options-container">
         {% for option in question.options %}
-            <button class="option-btn" onclick="checkAnswer('{{ option }}')">{{ option }}</button>
+            <button class="option-btn" onclick="selectAnswer('{{ option }}')">{{ option }}</button>
         {% endfor %}
     </div>
-    <div class="feedback" id="feedback"></div>
-    <form method="GET" action="/quiz/{{ topic }}/{{ question_id + 1 }}">
-        <button id="next-btn" class="next-btn" type="submit" style="display: none;">Next →</button>
-    </form>
+    <div class="nav-buttons">
+        {% if question_id > 1 %}
+        <a href="/quiz/{{ topic }}/{{ question_id - 1 }}" class="nav-btn" id="prev-btn">← Back</a>
+        {% else %}
+        <button class="nav-btn" id="prev-btn" disabled>← Back</button>
+        {% endif %}
+        
+        {% if question_id == total_questions %}
+        <button id="submit-btn" class="submit-btn inactive">Submit Quiz</button>
+        {% else %}
+        <button id="next-btn" class="nav-btn inactive">Next →</button>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
 
@@ -54,22 +63,16 @@
     .option-btn:hover {
         background-color: #e0e0e0;
     }
-    .feedback {
-        margin-top: 15px;
-        padding: 10px;
-        border-radius: 4px;
-        display: none;
+    .option-btn.selected {
+        background-color: #007BFF;
+        color: white;
     }
-    .correct {
-        background-color: #d4edda;
-        color: #155724;
-    }
-    .incorrect {
-        background-color: #f8d7da;
-        color: #721c24;
-    }
-    .next-btn {
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
         margin-top: 20px;
+    }
+    .nav-btn {
         background-color: #007BFF;
         color: white;
         padding: 10px 20px;
@@ -77,42 +80,101 @@
         border-radius: 4px;
         font-size: 1em;
         cursor: pointer;
+        text-decoration: none;
+        text-align: center;
     }
-    .next-btn:hover {
+    .nav-btn:hover:not(.inactive) {
         background-color: #0056b3;
+    }
+    .nav-btn.inactive {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+    .submit-btn {
+        background-color: #a3d9a5; /* Light green */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 1em;
+        cursor: pointer;
+        text-align: center;
+        transition: background-color 0.3s;
+    }
+    .submit-btn:not(.inactive):hover {
+        background-color: #28a745; /* Darker green when active */
+    }
+    .submit-btn.inactive {
+        background-color: #d1e7d1; /* Very light green */
+        color: #666;
+        cursor: not-allowed;
     }
 </style>
 
 <script>
     const topic = "{{ topic }}";
     const questionId = {{ question_id }};
-    const correctAnswer = "{{ question.correct_answer }}";
+    const isLastQuestion = questionId === {{ total_questions }};
+    let selectedOption = null;
 
-    function checkAnswer(selectedOption) {
-        const feedbackDiv = document.getElementById('feedback');
-        const nextBtn = document.getElementById('next-btn');
-
-        if (selectedOption === correctAnswer) {
-            feedbackDiv.textContent = "Correct!";
-            feedbackDiv.className = 'feedback correct';
+    function selectAnswer(option) {
+        // Remove selected class from all buttons
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked button
+        event.target.classList.add('selected');
+        
+        // Store the selected option
+        selectedOption = option;
+        
+        // Activate navigation button
+        if (isLastQuestion) {
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.classList.remove('inactive');
+            submitBtn.onclick = function() {
+                recordAnswerAndProceed();
+            };
         } else {
-            feedbackDiv.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
-            feedbackDiv.className = 'feedback incorrect';
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.classList.remove('inactive');
+            nextBtn.onclick = function() {
+                recordAnswerAndProceed();
+            };
         }
+    }
 
-        feedbackDiv.style.display = 'block';
-        nextBtn.style.display = 'inline-block';
-
+    function recordAnswerAndProceed() {
+        if (!selectedOption) return;
+        
+        // Record the answer
         fetch('/submit_answer', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 topic: topic,
                 question_id: questionId,
-                answer: selectedOption,
-                correct: selectedOption === correctAnswer
+                answer: selectedOption
             })
+        }).then(() => {
+            if (isLastQuestion) {
+                window.location.href = "/results/{{ topic }}";
+            } else {
+                window.location.href = "/quiz/{{ topic }}/{{ question_id + 1 }}";
+            }
         });
     }
+
+    // Initialize button states
+    document.addEventListener('DOMContentLoaded', function() {
+        if (isLastQuestion) {
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.onclick = null;
+        } else {
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.onclick = null;
+        }
+    });
 </script>
 {% endblock %}

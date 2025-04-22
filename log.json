@@ -1,58 +1,147 @@
 {
     "lessons": [
         {
-            "lesson_id": 2,
-            "timestamp": "2025-04-21T21:07:21.746181"
-        },
-        {
-            "lesson_id": 2,
-            "timestamp": "2025-04-21T21:07:23.953895"
-        },
-        {
             "lesson_id": 1,
-            "timestamp": "2025-04-21T21:07:25.494492"
-        },
-        {
-            "lesson_id": 1,
-            "timestamp": "2025-04-21T21:07:26.290871"
-        },
-        {
-            "lesson_id": 1,
-            "timestamp": "2025-04-21T21:07:28.907894"
-        },
-        {
-            "lesson_id": 1,
-            "timestamp": "2025-04-21T21:07:30.591854"
+            "timestamp": "2025-04-21T21:12:32.734904"
         },
         {
             "lesson_id": 2,
-            "timestamp": "2025-04-21T21:07:31.726950"
-        },
-        {
-            "lesson_id": 1,
-            "timestamp": "2025-04-21T21:07:33.211054"
-        },
-        {
-            "lesson_id": 2,
-            "timestamp": "2025-04-21T21:07:34.478606"
-        },
-        {
-            "lesson_id": 1,
-            "timestamp": "2025-04-21T21:07:45.312838"
-        },
-        {
-            "lesson_id": 1,
-            "timestamp": "2025-04-21T21:07:47.326309"
-        },
-        {
-            "lesson_id": 2,
-            "timestamp": "2025-04-21T21:07:48.559265"
-        },
-        {
-            "lesson_id": 1,
-            "timestamp": "2025-04-21T21:07:51.699653"
+            "timestamp": "2025-04-21T21:12:37.689555"
         }
     ],
-    "quiz_answers": [],
+    "quiz_answers": [
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "125\u00b0F",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "125\u00b0F",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 2,
+            "answer": "10+ minutes",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "160\u00b0F",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 2,
+            "answer": "10+ minutes",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "125\u00b0F",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "145\u00b0F",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 2,
+            "answer": "2\u20133 minutes",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 3,
+            "answer": "Medium Well",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 4,
+            "answer": "Cool red center, very soft and moist",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 5,
+            "answer": "4\u20135 minutes",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "135\u00b0F",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 2,
+            "answer": "6\u20137 minutes",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 3,
+            "answer": "Medium Well",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 4,
+            "answer": "Cool red center, very soft and moist",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 4,
+            "answer": "Cool red center, very soft and moist",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 5,
+            "answer": "4\u20135 minutes",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 1,
+            "answer": "125\u00b0F",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 2,
+            "answer": "2\u20133 minutes",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 3,
+            "answer": "Medium Well",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 4,
+            "answer": "Warm pink center, moderately firm, juicy",
+            "correct": null
+        },
+        {
+            "topic": "meat",
+            "question_id": 5,
+            "answer": "3\u20134 minutes",
+            "correct": null
+        }
+    ],
     "simulator_actions": []
 }
