@@ -2,31 +2,37 @@
 
 {% block content %}
 <div class="quiz-container">
-    <div class="progress">
-        <span>Question</span>
-        <span id="current-q">{{ question_id }}</span>
-        <span>of</span>
-        <span id="total-qs">{{ total_questions }}</span>
-      </div>      
+    <div class="progress-container">
+        <div class="progress-text">
+            <span>Question</span>
+            <span id="current-q">{{ question_id }}</span>
+            <span>of</span>
+            <span id="total-qs">{{ total_questions }}</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ (question_id / total_questions) * 100 }}%"></div>
+        </div>
+    </div>
+    
     <div class="question-box">
         <div class="question" id="question-text">{{ question.question }}</div>
     </div>
     <div class="options" id="options-container">
         {% for option in question.options %}
-            <button class="option-btn" onclick="selectAnswer('{{ option }}')">{{ option }}</button>
+            <button class="option-btn" data-option="{{ option }}" onclick="selectAnswer('{{ option }}')">{{ option }}</button>
         {% endfor %}
     </div>
     <div class="nav-buttons">
         {% if question_id > 1 %}
-        <a href="/quiz/{{ topic }}/{{ question_id - 1 }}" class="nav-btn" id="prev-btn">← Back</a>
+        <a href="/quiz/{{ topic }}/{{ question_id - 1 }}" class="nav-btn back-btn">← Back</a>
         {% else %}
-        <button class="nav-btn" id="prev-btn" disabled>← Back</button>
+        <button class="nav-btn back-btn inactive" id="prev-btn" disabled>← Back</button>
         {% endif %}
         
         {% if question_id == total_questions %}
         <button id="submit-btn" class="submit-btn inactive">Submit Quiz</button>
         {% else %}
-        <button id="next-btn" class="nav-btn inactive">Next →</button>
+        <button id="next-btn" class="nav-btn next-btn inactive">Next →</button>
         {% endif %}
     </div>
 </div>
@@ -40,6 +46,36 @@
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+    
+    .progress-container {
+        margin-bottom: 20px;
+    }
+    
+    .progress-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 5px;
+        font-size: 0.9em;
+        color: #555;
+    }
+    
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background-color: #28a745; /* Green color */
+        transition: width 0.3s ease;
+        border-radius: 4px;
+    }
+    
     .question-box {
         border: 2px solid #007BFF;
         border-radius: 6px;
@@ -63,12 +99,22 @@
         border-radius: 4px;
         cursor: pointer;
         text-align: left;
-        transition: background-color 0.3s;
+        transition: all 0.3s;
     }
-    .option-btn:hover {
+    .option-btn:hover:not(.correct):not(.incorrect) {
         background-color: #e0e0e0;
     }
-    .option-btn.selected {
+    .option-btn.correct {
+        background-color: #28a745;
+        color: white;
+        border-color: #28a745;
+    }
+    .option-btn.incorrect {
+        background-color: #dc3545;
+        color: white;
+        border-color: #dc3545;
+    }
+    .option-btn.selected:not(.correct):not(.incorrect) {
         background-color: #007BFF;
         color: white;
     }
@@ -78,8 +124,6 @@
         margin-top: 20px;
     }
     .nav-btn {
-        background-color: #007BFF;
-        color: white;
         padding: 10px 20px;
         border: none;
         border-radius: 4px;
@@ -88,15 +132,30 @@
         text-decoration: none;
         text-align: center;
     }
-    .nav-btn:hover:not(.inactive) {
-        background-color: #0056b3;
+    .back-btn {
+        background-color: #ff6b6b; /* Red color for back button */
+        color: white;
     }
-    .nav-btn.inactive {
+    .back-btn.inactive {
+        background-color: #ffcccc; /* Light red for inactive back button */
+        cursor: not-allowed;
+    }
+    .back-btn:not(.inactive):hover {
+        background-color: #ff5252; /* Darker red on hover */
+    }
+    .next-btn {
+        background-color: #28a745; /* Green color for next button */
+        color: white;
+    }
+    .next-btn.inactive {
         background-color: #cccccc;
         cursor: not-allowed;
     }
+    .next-btn:not(.inactive):hover {
+        background-color: #218838; /* Darker green on hover */
+    }
     .submit-btn {
-        background-color: #a3d9a5; /* Light green */
+        background-color: #28a745; /* Green color for submit button */
         color: white;
         padding: 10px 20px;
         border: none;
@@ -104,15 +163,15 @@
         font-size: 1em;
         cursor: pointer;
         text-align: center;
-        transition: background-color 0.3s;
-    }
-    .submit-btn:not(.inactive):hover {
-        background-color: #28a745; /* Darker green when active */
+        box-shadow: none !important; /* Remove shadow */
     }
     .submit-btn.inactive {
         background-color: #d1e7d1; /* Very light green */
         color: #666;
         cursor: not-allowed;
+    }
+    .submit-btn:not(.inactive):hover {
+        background-color: #218838; /* Darker green when active */
     }
 </style>
 
@@ -121,8 +180,11 @@
     const questionId = {{ question_id }};
     const isLastQuestion = questionId === {{ total_questions }};
     let selectedOption = null;
+    const correctAnswer = "{{ question.correct_answer }}";
 
     function selectAnswer(option) {
+        if (selectedOption) return; // Prevent changing answer after selection
+        
         // Remove selected class from all buttons
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.classList.remove('selected');
@@ -134,7 +196,23 @@
         // Store the selected option
         selectedOption = option;
         
-        // Activate navigation button
+        // Check if answer is correct
+        const isCorrect = (option === correctAnswer);
+        
+        // Highlight the selected answer
+        if (isCorrect) {
+            event.target.classList.add('correct');
+        } else {
+            event.target.classList.add('incorrect');
+            // Also highlight the correct answer
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                if (btn.dataset.option === correctAnswer) {
+                    btn.classList.add('correct');
+                }
+            });
+        }
+        
+        // Activate navigation button immediately
         if (isLastQuestion) {
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.classList.remove('inactive');
@@ -144,25 +222,32 @@
             nextBtn.classList.remove('inactive');
             nextBtn.disabled = false;
         }
+        
+        // Record the answer (optional - if you want to log immediately)
+        recordAnswer(option, isCorrect);
+    }
+
+    async function recordAnswer(selectedOption, isCorrect) {
+        try {
+            await fetch('/submit_answer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    topic: topic,
+                    question_id: questionId,
+                    answer: selectedOption,
+                    correct: isCorrect
+                })
+            });
+        } catch (error) {
+            console.error('Error submitting answer:', error);
+        }
     }
 
     async function recordAnswerAndProceed() {
         if (!selectedOption) return;
         
         try {
-            // Record the answer
-            const response = await fetch('/submit_answer', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    topic: topic,
-                    question_id: questionId,
-                    answer: selectedOption
-                })
-            });
-            
-            if (!response.ok) throw new Error('Network response was not ok');
-            
             // Proceed to next question or results
             if (isLastQuestion) {
                 window.location.href = `/results/${topic}`;
@@ -170,7 +255,7 @@
                 window.location.href = `/quiz/${topic}/${questionId + 1}`;
             }
         } catch (error) {
-            console.error('Error submitting answer:', error);
+            console.error('Error:', error);
             // Fallback navigation if request fails
             if (isLastQuestion) {
                 window.location.href = `/results/${topic}`;
