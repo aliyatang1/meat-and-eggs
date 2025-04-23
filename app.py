@@ -30,6 +30,16 @@ def learn(lesson_id):
     lesson = lessons.get(str(lesson_id))
     return render_template('learn.html', lesson=lesson)
 
+@app.route('/simulator/<type>')
+def simulator(type):
+    if type == 'steak':
+        return render_template('steak_simulator.html')
+    elif type == 'eggs':
+        return render_template('egg_simulator.html')
+    else:
+        return "Simulator not found", 404
+
+
 @app.route('/quiz')
 def quiz_selection():
     return render_template('quiz_selection.html')

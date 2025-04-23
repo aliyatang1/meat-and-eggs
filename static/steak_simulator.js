@@ -1,37 +1,43 @@
+function resetSession() {
+  completedLevels.clear();
+  location.reload(); // easy way to reset the session cleanly
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const donenessLevels = [
     {
       name: "Rare",
       temp: "125°F",
-      simTime: 10, // seconds
+      simTime: 5, // seconds
       img: "steaksim-rare.png",
       desc: "Cool red center, very soft and moist."
     },
     {
       name: "Medium Rare",
       temp: "135°F",
-      simTime: 14,
+      simTime: 7,
       img: "steaksim-mediumrare.png",
       desc: "Warm red-pink center, tender and juicy."
     },
     {
       name: "Medium",
       temp: "140°F",
-      simTime: 18,
+      simTime: 9,
       img: "steaksim-medium.png",
       desc: "Warm pink center, moderately firm, juicy."
     },
     {
       name: "Medium Well",
       temp: "150°F",
-      simTime: 22,
+      simTime: 11,
       img: "steaksim-mediumwell.png",
       desc: "Slight hint of pink in the center, firm and slightly juicy."
     },
     {
       name: "Well",
       temp: "160°F+",
-      simTime: 26,
+      simTime: 13,
       img: "steaksim-well.png",
       desc: "No pink, firm, and dry throughout."
     }
@@ -42,6 +48,9 @@ document.addEventListener("DOMContentLoaded", () => {
     img: "steaksim-burnt.png",
     desc: "Charred and overcooked."
   };
+
+  const completedLevels = new Set(); // Tracks which doneness levels were correctly hit
+
 
   let elapsedSeconds = 0;
   let interval;
@@ -57,8 +66,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const timerDisplay = document.getElementById("cookingTimer");
 
   // Pick a target doneness
-  target = donenessLevels[Math.floor(Math.random() * donenessLevels.length)];
+  const remainingLevels = donenessLevels.filter(level => !completedLevels.has(level.name));
+
+  if (remainingLevels.length === 0) {
+    // All levels completed
+    targetLabel.textContent = "🎉 All done!";
+    actionBtn.style.display = "none";
+    steakImage.style.opacity = 0.5;
+    resultMsg.textContent = "✅ You’ve successfully cooked all doneness levels!";
+    resultContainer.style.display = "block";
+    return;
+  }
+  
+  // Pick a new target from remaining levels
+  target = remainingLevels[Math.floor(Math.random() * remainingLevels.length)];
   targetLabel.textContent = target.name;
+  
 
   actionBtn.addEventListener("click", () => {
     if (!isCooking) {
@@ -68,13 +91,13 @@ document.addEventListener("DOMContentLoaded", () => {
       resultContainer.style.display = "none";
       elapsedSeconds = 0;
       steakImage.src = "/static/images/steaksim-raw.png";
-      const realMinutes = (elapsedSeconds / 2).toFixed(1);
+      const realMinutes = elapsedSeconds.toFixed(1);
       timerDisplay.textContent = `${realMinutes} min`;
       
 
       timerInterval = setInterval(() => {
         elapsedSeconds++;
-        const realMinutes = (elapsedSeconds / 2).toFixed(1);
+        const realMinutes = elapsedSeconds.toFixed(1);
         timerDisplay.textContent = `${realMinutes} min`;
       }, 1000);
       
@@ -86,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .reverse()
           .find(level => elapsedSeconds >= level.simTime);
 
-        if (elapsedSeconds >= 28) {
+        if (elapsedSeconds >= 14) {
           steakImage.src = `/static/images/${burnt.img}`;
           clearInterval(interval);
           clearInterval(timerInterval);
@@ -109,14 +132,38 @@ document.addEventListener("DOMContentLoaded", () => {
         .reverse()
         .find(level => elapsedSeconds >= level.simTime);
 
-      let resultText;
-      if (current?.name === target.name) {
-        resultText = `✅ Nice! This would be ${target.temp}—${target.name.toLowerCase()}.`;
-      } else if (current) {
-        resultText = `❌ Boo you suck at cooking :( This is ${current.name} — you can tell by the ${current.desc}. ${target.name} should have ${target.desc}`;
-      } else {
-        resultText = `❌ That steak is undercooked. ${target.name} should have ${target.desc}`;
-      }
+        let resultText;
+
+        const currentSteak = donenessLevels.slice().reverse().find(level => elapsedSeconds >= level.simTime);
+        const userLevel = currentSteak;
+
+
+        if (userLevel?.name === target.name) {
+          completedLevels.add(target.name);
+          resultText = `Nice! This would be ${target.temp}—${target.name.toLowerCase()}.`;
+        
+          const progressText = `You’ve cooked ${completedLevels.size} of ${donenessLevels.length} doneness levels.`;
+          document.getElementById("donenessProgress").textContent = progressText;
+        
+          if (completedLevels.size === donenessLevels.length) {
+            resultText += ` 🎉 You’ve mastered all 5 doneness levels!`;
+        
+            const playAgainBtn = document.querySelector('a[href="/simulator/steak"]');
+            playAgainBtn.style.display = "none";
+        
+            const quizBtn = document.querySelector('a[href="/quiz/meat/1"]');
+            quizBtn.classList.add("btn-lg");
+            quizBtn.textContent = "🎓 You’re Ready — Take the Steak Quiz!";
+          }
+        
+        } else if (current) {
+          resultText = `❌ Boo you suck at cooking :( This is ${current.name} — you can tell by the ${current.desc}. ${target.name} should have ${target.desc}`;
+        } else {
+          resultText = `❌ That steak is undercooked. ${target.name} should have ${target.desc}`;
+        }
+        
+
+      
 
       resultMsg.textContent = resultText;
       resultContainer.style.display = "block";
