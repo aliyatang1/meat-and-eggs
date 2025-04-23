@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify
 import os
 import json
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = 'your-secret-key'  # Needed for session
 
 user_logs = {
     "lessons": [],
@@ -11,12 +12,10 @@ user_logs = {
     "simulator_actions": []
 }
 
-#logs info about time, correctness, etc. onto log.json
 def load_json(filename):
     with open(os.path.join('static', 'json', filename), 'r') as f:
         return json.load(f)
 
-# Helper function to save logs to log.json
 def save_user_logs():
     with open('log.json', 'w') as f:
         json.dump(user_logs, f, indent=4)
@@ -25,88 +24,36 @@ def save_user_logs():
 def welcome():
     return render_template('welcome.html')
 
-#shows the specific lesson either meat or eggs
 @app.route('/learn/<int:lesson_id>')
 def learn(lesson_id):
     lessons = load_json('lessons.json')
     lesson = lessons.get(str(lesson_id))
-
-    timestamp = datetime.now().isoformat()
-    user_logs['lessons'].append({'lesson_id': lesson_id, 'timestamp': timestamp})
-    save_user_logs()
-
     return render_template('learn.html', lesson=lesson)
 
-#quiz for either meat or eggs -> redirects the person's quiz topic
+# Quiz selection page
+@app.route('/quiz')
+def quiz_selection():
+    return render_template('quiz_selection.html')
+
+# Individual quiz questions
 @app.route('/quiz/<topic>/<int:question_id>')
 def quiz(topic, question_id):
-    if topic not in ['meat', 'eggs']:
-        return "Invalid quiz topic", 404
-
     quiz_data = load_json(f'quiz_{topic}.json')
     question = quiz_data.get(str(question_id))
-
-    if not question:
-        correct_count = len([
-            q for q in user_logs['quiz_answers']
-            if q['topic'] == topic and q['correct']
-        ])
-        return render_template('results.html', score=correct_count)
-
-    return render_template(
-    'quiz.html',
-    topic=topic,
-    question_id=question_id,
-    question=question,
-    total_questions=len(quiz_data)
-)
-
-@app.route('/results/<topic>')
-def show_results(topic):
-    # Get the user's score from the session or database
-    correct_count = session.get(f'{topic}_correct', 0)  # Assuming you stored it in session
-    total_questions = 5
     
-    return render_template('results.html', 
+    if not question:
+        return render_template('results.html', topic=topic)
+    
+    return render_template('quiz.html',
                          topic=topic,
-                         correct_count=correct_count,
-                         total_questions=total_questions)
+                         question_id=question_id,
+                         question=question,
+                         total_questions=len(quiz_data))
 
-
-#retrieves the quiz answers for the user
 @app.route('/submit_answer', methods=['POST'])
 def submit_answer():
     data = request.get_json()
-    topic = data.get('topic')
-    question_id = data.get('question_id')
-    answer = data.get('answer')
-    correct = data.get('correct')
-
-    user_logs['quiz_answers'].append({
-        'topic': topic,
-        'question_id': question_id,
-        'answer': answer,
-        'correct': correct
-    })
-
-    save_user_logs()
-    return jsonify(success=True)
-
-#retrieves the simulators
-@app.route('/simulator/<type>')
-def simulator(type):
-    if type == 'steak':
-        return render_template('steak_simulator.html')
-    elif type == 'eggs':
-        return render_template('egg_simulator.html')
-    else:
-        return "Simulator not found", 404
-
-#retrieves info about simulator actions to save onto log.json
-@app.route('/log_action', methods=['POST'])
-def log_action():
-    data = request.get_json()
-    user_logs['simulator_actions'].append(data)
+    user_logs['quiz_answers'].append(data)
     save_user_logs()
     return jsonify(success=True)
 
