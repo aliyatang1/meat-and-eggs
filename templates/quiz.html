@@ -138,47 +138,59 @@
         if (isLastQuestion) {
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.classList.remove('inactive');
-            submitBtn.onclick = function() {
-                recordAnswerAndProceed();
-            };
+            submitBtn.disabled = false;
         } else {
             const nextBtn = document.getElementById('next-btn');
             nextBtn.classList.remove('inactive');
-            nextBtn.onclick = function() {
-                recordAnswerAndProceed();
-            };
+            nextBtn.disabled = false;
         }
     }
 
-    function recordAnswerAndProceed() {
+    async function recordAnswerAndProceed() {
         if (!selectedOption) return;
         
-        // Record the answer
-        fetch('/submit_answer', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                topic: topic,
-                question_id: questionId,
-                answer: selectedOption
-            })
-        }).then(() => {
+        try {
+            // Record the answer
+            const response = await fetch('/submit_answer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    topic: topic,
+                    question_id: questionId,
+                    answer: selectedOption
+                })
+            });
+            
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            // Proceed to next question or results
             if (isLastQuestion) {
-                window.location.href = "/results/{{ topic }}";
+                window.location.href = `/results/${topic}`;
             } else {
-                window.location.href = "/quiz/{{ topic }}/{{ question_id + 1 }}";
+                window.location.href = `/quiz/${topic}/${questionId + 1}`;
             }
-        });
+        } catch (error) {
+            console.error('Error submitting answer:', error);
+            // Fallback navigation if request fails
+            if (isLastQuestion) {
+                window.location.href = `/results/${topic}`;
+            } else {
+                window.location.href = `/quiz/${topic}/${questionId + 1}`;
+            }
+        }
     }
 
-    // Initialize button states
+    // Initialize button states and event listeners
     document.addEventListener('DOMContentLoaded', function() {
-        if (isLastQuestion) {
-            const submitBtn = document.getElementById('submit-btn');
-            submitBtn.onclick = null;
-        } else {
-            const nextBtn = document.getElementById('next-btn');
-            nextBtn.onclick = null;
+        const nextBtn = isLastQuestion ? 
+            document.getElementById('submit-btn') : 
+            document.getElementById('next-btn');
+        
+        nextBtn.addEventListener('click', recordAnswerAndProceed);
+        
+        // Enable back button if not first question
+        if (questionId > 1) {
+            document.getElementById('prev-btn').disabled = false;
         }
     });
 </script>

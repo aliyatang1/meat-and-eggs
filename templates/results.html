@@ -7,10 +7,10 @@
         <h2>Your Score</h2>
         <div class="score-display">
             <span class="correct-answers">{{ correct_count }}</span> out of 
-            <span class="total-questions">5</span> correct
+            <span class="total-questions">{{ total_questions }}</span> correct
         </div>
         <div class="percentage">
-            {{ (correct_count / 5 * 100) | round | int }}%
+            {{ (correct_count / total_questions * 100) | round | int }}%
         </div>
     </div>
     
