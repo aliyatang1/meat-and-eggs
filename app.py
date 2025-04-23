@@ -63,7 +63,7 @@ def submit_answer():
     
     # Load quiz data and correct answer
     quiz_data = load_json(f'quiz_{topic}.json')
-    correct_answer = quiz_data[question_id]['answer']
+    correct_answer = quiz_data[question_id]['correct_answer']
     
     # Check if answer is correct
     is_correct = (user_answer == correct_answer)
