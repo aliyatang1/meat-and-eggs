@@ -96,3 +96,8 @@
 #cook{
   padding-top: 30px;
 }
+
+.subhead {
+  margin-top: 0;     
+  margin-bottom: 1em; 
+}

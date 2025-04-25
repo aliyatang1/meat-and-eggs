@@ -2,28 +2,33 @@
 
 {% block content %}
   <div class="text-center">
-    <h1 class="page-title mb-4">Learn How to Cook Proteins 🥩🥚</h1>
+    <h1>Meat and Eggs: guide to cooking 🥩🥚</h1>
+    <p class="subhead">Click to start a 5-minute interactive lesson!</p>
   </div>
-
+  <br>
   <div class="row justify-content-center gap-row mb-5">
     <!-- Steak Section -->
     <div class="col-md-4 mb-5 text-center">
-      <a href="{{ url_for('learn', lesson_id=1) }}">
-        <button class="btn btn-success btn-lg learn-btn">Learn About Steak!</button>
-      </a>
+      
       <div>
-        <img src="{{ url_for('static', filename='images/home-steak.jpeg') }}" alt="Steak" class="img-fluid rounded home-image" style="max-height: 250px;">
+        <img src="{{ url_for('static', filename='images/home-steak.jpeg') }}" alt="Steak" class="img-fluid rounded home-image" style="max-height: 350px;">
       </div>
+      <br>
+      <a href="{{ url_for('learn', lesson_id=1) }}">
+        <button class="btn btn-success btn-lg learn-btn">Steak</button>
+      </a>
     </div>
   
     <!-- Eggs Section -->
     <div class="col-md-4 mb-5 text-center">
-      <a href="{{ url_for('learn', lesson_id=2) }}">
-        <button class="btn btn-success btn-lg learn-btn">Learn About Eggs!</button>
-      </a>
+      
       <div>
-        <img src="{{ url_for('static', filename='images/home-eggs.png') }}" alt="Eggs" class="img-fluid rounded home-image" style="max-height: 250px;">
+        <img src="{{ url_for('static', filename='images/home-eggs.png') }}" alt="Eggs" class="img-fluid rounded home-image" style="max-height: 350px;">
       </div>
+      <br>
+      <a href="{{ url_for('learn', lesson_id=2) }}">
+        <button class="btn btn-success btn-lg learn-btn">Eggs</button>
+      </a>
     </div>
   </div>
   
