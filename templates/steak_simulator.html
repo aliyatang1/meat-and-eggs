@@ -17,11 +17,24 @@
   </div>
 </div>
 
-<div class="simulator-wrapper mt-4">
-  <img src="{{ url_for('static', filename='images/pan.png') }}" class="pan-img" alt="Pan">
-  <img id="steakImage" src="{{ url_for('static', filename='images/steaksim-raw.png') }}" class="steak-img" alt="Steak">
+<div class="simulator-flex">
+  <div class="thermometer-wrapper">
+    <div id="thermometer">
+      <div id="thermo-fill"></div>
+      <div id="thermo-bulb"></div>
+    </div>
+    <div id="tempLabel" class="text-center mt-2">Temp: 80°F</div>
+  </div>
+
+  <div class="simulator-wrapper">
+    <img src="{{ url_for('static', filename='images/pan.png') }}" class="pan-img" alt="Pan">
+    <img id="steakImage" src="{{ url_for('static', filename='images/steaksim-raw.png') }}" class="steak-img" alt="Steak">
+  </div>
 </div>
 
 
+
 <script src="{{ url_for('static', filename='steak_simulator.js') }}"></script>
+<audio id="sizzleSound" src="{{ url_for('static', filename='sounds/sizzle.mp3') }}" preload="auto"></audio>
+
 {% endblock %}

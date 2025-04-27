@@ -2,6 +2,76 @@
     "lessons": [],
     "quiz_answers": [
         {
+            "topic": "meat",
+            "question_id": "1",
+            "user_answer": "145\u00b0F",
+            "correct_answer": "135\u00b0F",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": "2",
+            "user_answer": "6\u20137 minutes",
+            "correct_answer": "6\u20137 minutes",
+            "correct": true
+        },
+        {
+            "topic": "meat",
+            "question_id": "3",
+            "user_answer": "Medium",
+            "correct_answer": "Medium",
+            "correct": true
+        },
+        {
+            "topic": "meat",
+            "question_id": "4",
+            "user_answer": "Warm red-pink center, tender and juicy",
+            "correct_answer": "Cool red center, very soft and moist",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": "5",
+            "user_answer": "4\u20135 minutes",
+            "correct_answer": "5\u20136 minutes",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": "1",
+            "user_answer": "125\u00b0F",
+            "correct_answer": "135\u00b0F",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": "2",
+            "user_answer": "6\u20137 minutes",
+            "correct_answer": "6\u20137 minutes",
+            "correct": true
+        },
+        {
+            "topic": "meat",
+            "question_id": "3",
+            "user_answer": "Rare",
+            "correct_answer": "Medium",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": "4",
+            "user_answer": "Slight hint of pink in the center, firm and slightly juicy",
+            "correct_answer": "Cool red center, very soft and moist",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": "5",
+            "user_answer": "2\u20133 minutes",
+            "correct_answer": "5\u20136 minutes",
+            "correct": false
+        },
+        {
             "topic": "eggs",
             "question_id": "1",
             "user_answer": "Sunny Side Up",
@@ -18,9 +88,44 @@
         {
             "topic": "eggs",
             "question_id": "3",
-            "user_answer": "When the whites are opaque",
+            "user_answer": "When the yolk turns white",
             "correct_answer": "When the whites are opaque",
+            "correct": false
+        },
+        {
+            "topic": "eggs",
+            "question_id": "4",
+            "user_answer": "1 minute",
+            "correct_answer": "2 minutes",
+            "correct": false
+        },
+        {
+            "topic": "eggs",
+            "question_id": "5",
+            "user_answer": "Set whites and jammy yolk",
+            "correct_answer": "Set whites and jammy yolk",
             "correct": true
+        },
+        {
+            "topic": "eggs",
+            "question_id": "1",
+            "user_answer": "Sunny Side Up",
+            "correct_answer": "Sunny Side Up",
+            "correct": true
+        },
+        {
+            "topic": "eggs",
+            "question_id": "2",
+            "user_answer": "Over Medium",
+            "correct_answer": "Over Hard",
+            "correct": false
+        },
+        {
+            "topic": "eggs",
+            "question_id": "3",
+            "user_answer": "When the yolk is firm",
+            "correct_answer": "When the whites are opaque",
+            "correct": false
         },
         {
             "topic": "eggs",
@@ -33,6 +138,111 @@
             "topic": "eggs",
             "question_id": "5",
             "user_answer": "Whites still clear",
+            "correct_answer": "Set whites and jammy yolk",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": "1",
+            "user_answer": "125\u00b0F",
+            "correct_answer": "135\u00b0F",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": "2",
+            "user_answer": "6\u20137 minutes",
+            "correct_answer": "6\u20137 minutes",
+            "correct": true
+        },
+        {
+            "topic": "meat",
+            "question_id": "3",
+            "user_answer": "Rare",
+            "correct_answer": "Medium",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": "4",
+            "user_answer": "Slight hint of pink in the center, firm and slightly juicy",
+            "correct_answer": "Cool red center, very soft and moist",
+            "correct": false
+        },
+        {
+            "topic": "meat",
+            "question_id": "5",
+            "user_answer": "2\u20133 minutes",
+            "correct_answer": "5\u20136 minutes",
+            "correct": false
+        },
+        {
+            "topic": "eggs",
+            "question_id": "1",
+            "user_answer": "Sunny Side Up",
+            "correct_answer": "Sunny Side Up",
+            "correct": true
+        },
+        {
+            "topic": "eggs",
+            "question_id": "2",
+            "user_answer": "Sunny Side Up",
+            "correct_answer": "Over Hard",
+            "correct": false
+        },
+        {
+            "topic": "eggs",
+            "question_id": "3",
+            "user_answer": "When the yolk turns white",
+            "correct_answer": "When the whites are opaque",
+            "correct": false
+        },
+        {
+            "topic": "eggs",
+            "question_id": "4",
+            "user_answer": "1 minute",
+            "correct_answer": "2 minutes",
+            "correct": false
+        },
+        {
+            "topic": "eggs",
+            "question_id": "5",
+            "user_answer": "Set whites and jammy yolk",
+            "correct_answer": "Set whites and jammy yolk",
+            "correct": true
+        },
+        {
+            "topic": "eggs",
+            "question_id": "1",
+            "user_answer": "Sunny Side Up",
+            "correct_answer": "Sunny Side Up",
+            "correct": true
+        },
+        {
+            "topic": "eggs",
+            "question_id": "2",
+            "user_answer": "Over Easy",
+            "correct_answer": "Over Hard",
+            "correct": false
+        },
+        {
+            "topic": "eggs",
+            "question_id": "3",
+            "user_answer": "When the whites are opaque",
+            "correct_answer": "When the whites are opaque",
+            "correct": true
+        },
+        {
+            "topic": "eggs",
+            "question_id": "4",
+            "user_answer": "2 minutes",
+            "correct_answer": "2 minutes",
+            "correct": true
+        },
+        {
+            "topic": "eggs",
+            "question_id": "5",
+            "user_answer": "Runny yolk, unflipped",
             "correct_answer": "Set whites and jammy yolk",
             "correct": false
         }

@@ -60,20 +60,70 @@
 }
 
 
-
-.simulator-wrapper {
-  position: relative;
-  width: 400px;
-  height: 400px;
-  margin: 0 auto;
-  margin-bottom: 1rem;
-  transform: translateX(70px); /* nudge to the right */
-}
-
 #resultContainer {
   max-width: 600px;  /* Or try 500px, 400px — adjust as needed */
   margin: 1.5rem auto;
   text-align: center;
+}
+
+
+#cook{
+  padding-top: 30px;
+}
+
+.subhead {
+  margin-top: 0;     
+  margin-bottom: 1em; 
+}
+
+.simulator-flex {
+  display: flex;
+  justify-content: center; /* centers whole group */
+  align-items: center;
+  gap: 100px; /* widen the space between them a little */
+  margin-top: 40px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+
+.thermometer-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#thermometer {
+  width: 40px;
+  height: 250px;
+  background: #ddd;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+#thermo-fill {
+  background: linear-gradient(to top, blue, red);
+  width: 100%;
+  height: 0%;
+  position: absolute;
+  bottom: 0;
+  transition: height 0.5s ease;
+}
+
+#tempLabel {
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.simulator-wrapper {
+  position: relative;
+  width: 350px; /* was 500px before */
+  height: 350px; /* shrink proportionally */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -86,18 +136,9 @@
 
 .steak-img {
   position: absolute;
-  top: 45%;
-  left: 37%; /* move it slightly left */
+  top: 55%;
+  left: 35%;
   transform: translate(-50%, -50%);
-  width: 45%;
-  pointer-events: none;
-}
-
-#cook{
-  padding-top: 30px;
-}
-
-.subhead {
-  margin-top: 0;     
-  margin-bottom: 1em; 
+  width: 150px;
+  height: auto;
 }
