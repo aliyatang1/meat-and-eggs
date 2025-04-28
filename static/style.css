@@ -1,3 +1,6 @@
+body {
+  background-color: #FFF0DB; /* Beige color */
+}
 .navbar-nav .nav-link.nav-hover:hover {
     color: #000 !important;
     font-weight: 500;
