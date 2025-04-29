@@ -24,8 +24,11 @@
         {% endif %}
     </div>
     
-    <a href="/quiz/{{ topic }}/1" class="retake-btn">Retake Quiz</a>
-    <a href="/" class="home-btn">Back to Home</a>
+    <div class="button-group">
+        <a href="/" class="home-btn">Back to Home</a>
+        <a href="{{ url_for('learn', lesson_id=1) }}" class="learn-btn">Keep Learning</a>
+        <a href="/quiz/{{ topic }}/1" class="retake-btn">Retake Quiz</a>
+    </div>
 </div>
 {% endblock %}
 
@@ -87,22 +90,20 @@
         color: #ffc107;
     }
     
-    .retake-btn, .home-btn {
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .retake-btn, .home-btn, .learn-btn {
         display: inline-block;
         padding: 10px 20px;
-        margin: 10px;
         border-radius: 4px;
         text-decoration: none;
         font-weight: bold;
-    }
-    
-    .retake-btn {
-        background-color: #007BFF;
-        color: white;
-    }
-    
-    .retake-btn:hover {
-        background-color: #0056b3;
+        transition: background-color 0.3s;
     }
     
     .home-btn {
@@ -112,6 +113,24 @@
     
     .home-btn:hover {
         background-color: #5a6268;
+    }
+    
+    .learn-btn {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .learn-btn:hover {
+        background-color: #218838;
+    }
+    
+    .retake-btn {
+        background-color: #007BFF;
+        color: white;
+    }
+    
+    .retake-btn:hover {
+        background-color: #0056b3;
     }
 </style>
 {% endblock %}

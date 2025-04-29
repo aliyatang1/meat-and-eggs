@@ -39,7 +39,6 @@ def simulator(type):
     else:
         return "Simulator not found", 404
 
-
 @app.route('/quiz')
 def quiz_selection():
     return render_template('quiz_selection.html')
