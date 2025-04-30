@@ -3,6 +3,12 @@
 {% block content %}
 <div class="text-center mt-4">
   <h2 id="cook">Cook your steak to: <span id="targetDoneness" class="text-primary"></span></h2>
+
+  <div id="donenessSelector" class="doneness-list text-center">
+    <h5>Select Doneness:</h5>
+    <div id="donenessButtons"></div>
+  </div>  
+
   <h5 class="mt-2 text-muted" id="cookingTimerWrapper">Time: <span id="cookingTimer">0 min</span></h5>
   <button id="startBtn" class="btn btn-primary btn-lg mt-3">Start Cooking</button>
 </div>
@@ -11,10 +17,10 @@
 
 <div class="text-center mt-4" id="resultContainer" style="display: none;">
   <h4 id="resultMsg"></h4>
-  <div class="mt-3">
-    <a href="/simulator/steak" class="btn btn-outline-primary">Play Again</a>
-    <a href="/quiz/meat/1" class="btn btn-success">Take the Steak Quiz</a>
-  </div>
+  <div class="mt-3" id="resultButtons">
+    <button id="playAgainBtn" class="btn btn-outline-primary">Play Again</button>
+    <a href="/quiz/meat/1" id="quizBtn" class="btn btn-success">Take the Steak Quiz</a>
+  </div>  
 </div>
 
 <div class="simulator-flex">
