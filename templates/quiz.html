@@ -22,6 +22,8 @@
             <button class="option-btn" data-option="{{ option }}" onclick="selectAnswer('{{ option }}')">{{ option }}</button>
         {% endfor %}
     </div>
+    <!-- Feedback container added here -->
+    <div id="feedback-container" class="feedback-container"></div>
     <div class="nav-buttons">
         {% if question_id > 1 %}
         <a href="/quiz/{{ topic }}/{{ question_id - 1 }}" class="nav-btn back-btn">← Back</a>
@@ -173,6 +175,19 @@
     .submit-btn:not(.inactive):hover {
         background-color: #218838; /* Darker green when active */
     }
+    /* Feedback styles */
+    .feedback-container {
+        margin: 15px 0;
+        padding: 10px;
+        border-radius: 4px;
+        font-style: italic;
+    }
+    .correct-feedback {
+        color: #28a745;
+    }
+    .incorrect-feedback {
+        color: #dc3545;
+    }
 </style>
 
 <script>
@@ -210,6 +225,14 @@
                     btn.classList.add('correct');
                 }
             });
+        }
+        
+        // Show feedback
+        const feedbackContainer = document.getElementById('feedback-container');
+        if (isCorrect) {
+            feedbackContainer.innerHTML = '<p class="correct-feedback">Correct!</p>';
+        } else {
+            feedbackContainer.innerHTML = `<p class="incorrect-feedback">Wrong, the correct answer is "${correctAnswer}"</p>`;
         }
         
         // Activate navigation button immediately
