@@ -4,31 +4,30 @@
   <!-- Lesson Switch Buttons -->
   <div class="text-center mb-4">
     <a href="{{ url_for('learn', lesson_id=1) }}"
-       class="btn btn-outline-primary mx-2 {% if lesson.title == 'Levels of Doneness: Steak' %}active{% endif %}">
+        class="btn btn-outline-accent mx-2 {% if lesson.title == 'Levels of Doneness: Steak' %}active-accent{% endif %}">
       🥩 Steak
     </a>
     <a href="{{ url_for('learn', lesson_id=2) }}"
-       class="btn btn-outline-primary mx-2 {% if lesson.title == 'Levels of Doneness: Eggs' %}active{% endif %}">
+        class="btn btn-outline-accent mx-2 {% if lesson.title == 'Levels of Doneness: Eggs' %}active-accent{% endif %}">
       🍳 Eggs
-    </a>
+    </a> 
   </div>
 
   {% if lesson.title == "Levels of Doneness: Steak" %}
-  <div class="position-relative text-center py-3 mb-4">
+  <div class="position-relative text-center py-1 mb-4">
     <h2 class="display-5 font-weight-bold d-inline-block mb-0 levels">Levels of Doneness: Steak</h2>
-    <a href="/simulator/steak" class="btn btn-success simulator-link">Try the Steak Simulator!</a>
   </div>
 
   <!-- Arrow-controlled card scroller -->
   <div class="position-relative mb-5">
     <!-- Left arrow -->
-    <button id="steak-prev" class="btn arrow-btn position-absolute">
-      &#8249;
-    </button>
+    <button id="steak-prev" class="arrow-btn position-absolute">
+      <i class="fas fa-chevron-left"></i>
+    </button>    
 
     <!-- Scrollable cards wrapper -->
     <div id="steak-wrapper" class="d-flex overflow-hidden px-3 pb-4">
-      {% for item in lesson.content %}
+      {% for item in lesson.content | reverse %}
       <div class="card mx-3 flex-shrink-0" style="width: 280px;">
         <img src="{{ url_for('static', filename=item.image) }}"
              class="steakcard-img-top" alt="{{ item.level }}">
@@ -40,59 +39,65 @@
       </div>
       {% endfor %}
     </div>
+    
 
     <!-- Right arrow -->
-    <button id="steak-next" class="btn arrow-btn position-absolute">
-      &#8250;
-    </button>
+    <button id="steak-next" class="arrow-btn position-absolute">
+      <i class="fas fa-chevron-right"></i>
+    </button>    
   </div>
 
+  <div class="text-center">
+    <a href="/simulator/steak" class="btn btn-accent btn-lg">
+      Try the Steak Simulator!
+    </a>
+  </div>
+  
+  
   {% else %}
-  <div class="position-relative text-center py-3 mb-4">
+  <div class="position-relative text-center py-1 mb-4">
     <h2 class="display-5 font-weight-bold d-inline-block mb-0 levels">Levels of Doneness: Eggs</h2>
-    <a href="/simulator/eggs" class="btn btn-success simulator-link">Try the Egg Simulator!</a>
-  </div>
+  </div>  
 
-  <div class="container">
-    <div class="row justify-content-center">
-      {% for item in lesson.content %}
-      <div class="col-md-6 col-lg-3 mb-4">
-        <div class="card h-100 shadow text-center">
-          <img src="{{ url_for('static', filename=item.image) }}"
-               class="eggcard-img-top" alt="{{ item.style }}">
-          <div class="card-body">
-            <h5 class="card-title font-weight-bold">{{ item.style }}</h5>
-            <p class="card-text mb-1"><strong>Heat:</strong> {{ item.heat }}</p>
-            <p class="card-text mb-1"><strong>Time:</strong> {{ item.time }}</p>
-            <p class="card-text mb-1"><strong>Flip:</strong> {{ item.flip }}</p>
-            <p class="card-text"><strong>Description:</strong> {{ item.description }}</p>
+  <div class="d-flex flex-column align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        {% for item in lesson.content %}
+        <div class="col-md-6 col-lg-3 mb-3">
+          <div class="card h-100 shadow text-center egg-card">
+            <img src="{{ url_for('static', filename=item.image) }}"
+                 class="eggcard-img-top" alt="{{ item.style }}">
+                 <div class="card-body">
+                  <h5 class="card-title">{{ item.style }}</h5>
+                
+                  <div class="egg-card-details">
+                    <div class="egg-line"><strong>Heat:</strong> {{ item.heat }}</div>
+                    <div class="egg-line"><strong>Time:</strong> {{ item.time }}</div>
+                    <div style="height: 1rem;"></div>
+                    <div class="egg-line"><strong>Flip:</strong> {{ item.flip }}</div>
+                  </div>
+                  
+                
+                  <div class="egg-card-description">
+                    <p class="card-text"><strong>Description:</strong> {{ item.description }}</p>
+                  </div>
+                </div>                           
           </div>
         </div>
+        {% endfor %}
       </div>
-      {% endfor %}
+    </div>
+  
+    <!-- This is now cleanly outside the card grid -->
+    <div class="text-center" style="margin-top: 1.5rem;">
+      <a href="/simulator/eggs" class="btn btn-accent btn-lg">
+        Try the Egg Simulator!
+      </a>
     </div>
   </div>
+  
+  
   {% endif %}
-
-  <!-- Arrow button styling -->
-  <style>
-    .arrow-btn {
-      background-color: #BEBEBE;
-      border: none;
-      font-size: 2rem;
-      width: 3rem;
-      height: 3rem;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 10;
-    }
-    #steak-prev {
-      left: -2rem;
-    }
-    #steak-next {
-      right: -2rem;
-    }
-  </style>
 
   <!-- JS to drive arrow scrolling with wrap-around -->
   <script>
@@ -103,23 +108,51 @@
       const cards = Array.from(wrapper.querySelectorAll('.card'));
       const style = getComputedStyle(cards[0]);
       const cardWidth = cards[0].offsetWidth + parseFloat(style.marginLeft) + parseFloat(style.marginRight);
-
+  
       function scrollToIndex(index) {
         wrapper.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
       }
+  
+      function updateArrowStates() {
+        const maxScrollLeft = wrapper.scrollWidth - wrapper.clientWidth;
+        const scrollLeft = wrapper.scrollLeft;
 
+        // Disable prev button if at start
+        prevBtn.disabled = scrollLeft <= 0;
+        prevBtn.classList.toggle('disabled-arrow', scrollLeft <= 0);
+
+        // Disable next button if at or beyond max scroll
+        nextBtn.disabled = scrollLeft >= maxScrollLeft - 1;  // "-1" handles subpixel rounding
+        nextBtn.classList.toggle('disabled-arrow', scrollLeft >= maxScrollLeft - 1);
+      }
+
+  
       prevBtn && prevBtn.addEventListener('click', () => {
-        // determine current index from scroll position
         let currentIndex = Math.round(wrapper.scrollLeft / cardWidth);
-        let prevIndex = (currentIndex - 1 + cards.length) % cards.length;
-        scrollToIndex(prevIndex);
+        let prevIndex = currentIndex - 1;
+        if (prevIndex >= 0) {
+          scrollToIndex(prevIndex);
+          setTimeout(updateArrowStates, 300); // Wait for smooth scroll to finish
+        }
       });
-
+  
       nextBtn && nextBtn.addEventListener('click', () => {
         let currentIndex = Math.round(wrapper.scrollLeft / cardWidth);
-        let nextIndex = (currentIndex + 1) % cards.length;
-        scrollToIndex(nextIndex);
+        let nextIndex = currentIndex + 1;
+        if (nextIndex < cards.length) {
+          scrollToIndex(nextIndex);
+          setTimeout(updateArrowStates, 300);
+        }
       });
+  
+      // Also update state on manual scroll (e.g., touchpad)
+      wrapper.addEventListener('scroll', () => {
+        requestAnimationFrame(updateArrowStates);
+      });
+  
+      // Initial check
+      updateArrowStates();
     });
   </script>
+  
 {% endblock %}

@@ -1,26 +1,99 @@
+/* General UI */
 body {
   background-color: #FFF0DB; /* Beige color */
+  color: #444;
+  font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
-.navbar-nav .nav-link.nav-hover:hover {
-    color: #000 !important;
-    font-weight: 500;
-    text-decoration: underline;
-  }
-  
-  /* Add space between navbar links */
-.navbar-nav .nav-item {
-    margin-right: 30px;
-  }
 
-  /* More spacing around the h1 title */
+.text-dark {
+  color: #444 !important;
+}
+
+
+
+/* Navbar UI */
+.navbar {
+  background-color: #d8d3b7 !important;
+  border-bottom: 1px solid #d8d3b7;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Navbar text color */
+.navbar-light .navbar-nav .nav-link {
+  color: #5e4d3a;  /* Rich earthy brown for stronger contrast */
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+/* Hover effect with consistent green accent */
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.nav-hover:hover {
+  color: #6C7A55 !important;
+  text-decoration: underline;
+}
+
+/* Spacing between navbar items */
+.navbar-nav .nav-item {
+  margin-right: 30px;
+}
+
+
+
+/* button UI */
+/* Accent (primary) button */
+.btn-accent {
+  background-color: #50846d;
+  color: #fdfaf5;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+.btn-accent:hover,
+.btn-accent:focus {
+  background-color: #116a60;
+  color: #fdfaf5;
+}
+
+/* Outline accent version */
+.btn-outline-accent {
+  background-color: transparent;
+  color: #6C7A55;
+  border: 1px solid #6C7A55;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-accent:hover,
+.btn-outline-accent:focus {
+  background-color: #6C7A55;
+  color: white;
+}
+
+
+
+/* Welcome page styling */
+
+  /* More spacing around the h1 title on welcome page */
 .page-title {
   padding-top: 30px;
-  padding-bottom: 30px;
 }
+
+
+
+
+/* Learn page styling */
 
 /* More spacing around the images */
   img {
-    margin-top: 20px;
+    margin-top: 30px;
+}
+
+.card {
+  background-color: #fdfaf5; /* subtle off-white */
+  border: 1px solid #e0d7c8;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .steak-cards-wrapper {
@@ -38,12 +111,135 @@ body {
   object-fit: cover;
 }
 
-.eggcard-img-top{
-  aspect-ratio: 1 / 1;
+.egg-card {
+  background-color: #fdfaf5;
+  border: 1px solid #e0d7c8;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* ensures image stays flush */
+}
+
+.eggcard-img-top {
+  height: 160px;
   width: 100%;
   object-fit: cover;
-  margin-top: 0;
+  aspect-ratio: auto;
+  margin-top: 0;            /* ensure no margin */
+  padding-top: 0;           /* ensure no padding */
+  display: block;           /* avoids image baseline whitespace */
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
+
+
+.egg-card .card-body {
+  flex-grow: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.egg-card .card-title {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Wrap metadata group: Heat, Time, Flip */
+.egg-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Reserve enough space for wrapping without truncating */
+.egg-line {
+  min-height: 2.4rem; /* enough for up to 2 lines if needed */
+  line-height: 1.2rem;
+  margin: 0;
+}
+
+/* Description block */
+.egg-card-description {
+  height: 4.2rem;     /* Force same height in all cards */
+  overflow: hidden; /* Prevent overflow text from spilling */
+}
+
+.egg-card .card-text {
+  margin-bottom: 0.2rem;
+  font-size: 0.95rem;
+}
+
+
+
+
+.arrow-btn {
+  background-color: #d8d3b7;
+  color: #6C7A55;
+  border: none;
+  width: 3rem;
+  height: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1rem !important;
+  border-radius: 6px;
+  transition: 
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.arrow-btn:hover {
+  background-color: #8AA78D;
+  transform: translateY(-50%) scale(1.08); /* subtle zoom */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  outline: none;
+}
+
+.arrow-btn:focus,
+.arrow-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.arrow-btn:disabled,
+.arrow-btn.disabled-arrow {
+  background-color: #bfcabf;
+  color: #e7e4df;
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: translateY(-50%) scale(1);
+  box-shadow: none;
+}
+
+
+#steak-prev {
+  left: -2rem;
+}
+#steak-next {
+  right: -2rem;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.25rem;
+}
+
+
+
+/* simulator styling */
 
 .levels{
   display: inline;
@@ -71,7 +267,7 @@ body {
 
 
 #cook{
-  padding-top: 30px;
+  padding-top: 10px;
 }
 
 .subhead {
@@ -145,13 +341,6 @@ body {
   width: 150px;
   height: auto;
 }
-.navbar {
-  background-color: #d4d2d29c !important;  
-}
-.navbar-light .navbar-nav .nav-link {
-  color: rgb(77, 76, 76);     
-}
-
 
 .doneness-list {
   margin-bottom: 1rem;
