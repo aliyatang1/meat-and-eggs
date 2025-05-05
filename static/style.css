@@ -9,6 +9,12 @@ body {
   color: #444 !important;
 }
 
+.text-accent {
+  color: #50846d; /* Matches your .btn-accent */
+  font-weight: 600;
+}
+
+
 
 
 /* Navbar UI */
@@ -83,11 +89,6 @@ body {
 
 /* Learn page styling */
 
-/* More spacing around the images */
-  img {
-    margin-top: 30px;
-}
-
 .card {
   background-color: #fdfaf5; /* subtle off-white */
   border: 1px solid #e0d7c8;
@@ -109,6 +110,7 @@ body {
   aspect-ratio: 7 / 3;
   width: 100%;
   object-fit: cover;
+  margin-top: 30px;
 }
 
 .egg-card {
@@ -258,12 +260,34 @@ body {
   font-weight: 500;
 }
 
+.simulator-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3rem;
+  padding-left: 4rem;
+}
 
 #resultContainer {
-  max-width: 600px;  /* Or try 500px, 400px — adjust as needed */
-  margin: 1.5rem auto;
+  margin-top: 40px;
+  background-color: #fdfaf5;
+  border: 1px solid #e0d7c8;
+  border-radius: 12px;
+  width: 400px;
   text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  padding: 1.25rem 1.5rem;
+
+  font-size: 1.25rem;     /* larger than normal text */
 }
+
+#resultMsg {
+  max-width: 400px;
+}
+
+
+
 
 
 #cook{
@@ -279,10 +303,9 @@ body {
   display: flex;
   justify-content: center; /* centers whole group */
   align-items: center;
-  gap: 100px; /* widen the space between them a little */
-  margin-top: 40px;
-  margin-bottom: 40px;
+  gap: 50px; /* widen the space between them a little */
   flex-wrap: wrap;
+  margin-left: 5rem; /* shifts entire simulator group */
 }
 
 
@@ -293,8 +316,9 @@ body {
 }
 
 #thermometer {
+  margin-top: 50px;
   width: 40px;
-  height: 250px;
+  height: 225px;
   background: #ddd;
   border-radius: 20px;
   position: relative;
@@ -302,7 +326,7 @@ body {
 }
 
 #thermo-fill {
-  background: linear-gradient(to top, blue, red);
+  background: linear-gradient(to top, #d8a45d, #bb5c3c); /* warm orange to muted red */
   width: 100%;
   height: 0%;
   position: absolute;
@@ -324,6 +348,7 @@ body {
   justify-content: center;
   align-items: center;
 }
+
 
 
 

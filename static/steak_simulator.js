@@ -31,15 +31,17 @@ function renderDonenessButtons(donenessLevels, donenessButtonsContainer, isCooki
 
   donenessLevels.forEach(level => {
     const btn = document.createElement("button");
-    btn.classList.add("btn", "btn-outline-secondary", "m-1");
+    btn.classList.add("btn", "btn-outline-accent", "m-1");
     btn.dataset.doneness = level.name;
 
     const isDone = completedLevels.has(level.name);
     btn.innerHTML = isDone ? `${level.name} ✅` : level.name;
 
     if (target?.name === level.name) {
-      btn.classList.add("btn-primary");
+      btn.classList.remove("btn-outline-accent");
+      btn.classList.add("btn-accent");
     }
+    
 
     btn.addEventListener("click", () => {
       if (isCooking()) return;
@@ -54,6 +56,41 @@ function renderDonenessButtons(donenessLevels, donenessButtonsContainer, isCooki
 
 document.addEventListener("DOMContentLoaded", () => {
   
+  function resetSimulator() {
+    console.log("↩️ resetSimulator() called");
+  
+    // Reset UI elements
+    document.getElementById("tempLabel").textContent = "Temp: 80°F";
+    document.getElementById("thermo-fill").style.height = "0%";
+    steakImage.src = "/static/images/steaksim-raw.png";
+    resultContainer.style.display = "none";
+    
+    actionBtn.style.display = "inline-block";
+    actionBtn.disabled = false;
+    actionBtn.textContent = "Start Cooking";
+    console.log("▶️ Start Cooking button reset:", actionBtn.style.display, actionBtn.disabled);
+  
+    timerDisplay.textContent = "0 min";
+    console.log("🕒 Timer display reset:", timerDisplay.textContent);
+  
+    elapsedSeconds = 0;
+    console.log("⏱️ elapsedSeconds reset:", elapsedSeconds);
+  
+    // Stop any audio playing
+    sizzleSound.pause();
+    sizzleSound.currentTime = 0;
+  
+    // Clear timers
+    clearInterval(interval);
+    clearInterval(timerInterval);
+    console.log("🧹 Cleared cooking intervals");
+  
+    // Reset cooking flag
+    _isCooking = false;
+    console.log("🍳 Cooking state reset:", _isCooking);
+  }
+  
+
   const donenessLevels = [
     { name: "Rare", temp: "125°F", cookMinutes: 5, img: "steaksim-rare.png", desc: "Cool red center, very soft and moist." },
     { name: "Medium Rare", temp: "135°F", cookMinutes: 7, img: "steaksim-mediumrare.png", desc: "Warm red-pink center, tender and juicy." },
@@ -86,19 +123,32 @@ document.addEventListener("DOMContentLoaded", () => {
   const isCooking = () => _isCooking;
 
   // Default to Medium on load
-  target = donenessLevels.find(l => l.name === "Medium");
+  target = donenessLevels.find(l => l.name === "Rare");
   targetLabel.textContent = target.name;
   renderDonenessButtons(donenessLevels, donenessButtonsContainer, isCooking, targetLabel);
 
   actionBtn.addEventListener("click", () => {
+    console.log("👆 Start button clicked. _isCooking:", _isCooking);
+
     if (!_isCooking) {
       _isCooking = true;
       actionBtn.textContent = "Stop Cooking";
       resultContainer.style.display = "none";
       elapsedSeconds = 0;
-      steakImage.src = "/static/images/steaksim-raw.png";      sizzleSound.currentTime = 0;
-      sizzleSound.play();
+      steakImage.src = "/static/images/steaksim-raw.png";      
       timerDisplay.textContent = "0 min";
+
+      sizzleSound.pause(); // just in case
+      sizzleSound.currentTime = 0;
+      sizzleSound.volume = 1;
+      sizzleSound.muted = false;
+      
+      sizzleSound.play().then(() => {
+        console.log("🔊 Sizzle playing");
+      }).catch((e) => {
+        console.warn("❗Sizzle play blocked:", e);
+      });
+      
 
       timerInterval = setInterval(() => {
         elapsedSeconds++;
@@ -121,10 +171,22 @@ document.addEventListener("DOMContentLoaded", () => {
           clearInterval(timerInterval);
           fadeOutAudio(sizzleSound, 1000);
           actionBtn.style.display = "none";
+        
           resultMsg.textContent = "Merry Christmas, you got a block of charcoal.";
           resultContainer.style.display = "block";
+        
+          // ✅ Make play again work even when burned
+          playAgainBtn.textContent = "Try Again";
+          playAgainBtn.style.display = "inline-block";
+          playAgainBtn.onclick = () => {
+            resetSimulator();
+            actionBtn.style.display = "inline-block";
+            actionBtn.disabled = false;
+          };
+        
           _isCooking = false;
-        } else if (current) {
+        }
+         else if (current) {
           steakImage.src = `/static/images/${current.img}`;
         }
       }, 1000);
@@ -155,22 +217,18 @@ document.addEventListener("DOMContentLoaded", () => {
             target = nextUncompleted;
             targetLabel.textContent = nextUncompleted.name;
             renderDonenessButtons(donenessLevels, donenessButtonsContainer, isCooking, targetLabel);
+            resetSimulator();
+            actionBtn.style.display = "inline-block"; // Make sure it's visible
+            actionBtn.disabled = false;
+          };          
+          
+          // Hide quiz button until all levels are done
+         quizBtn.style.display = "none";
 
-              // Reset thermometer
-            document.getElementById("tempLabel").textContent = "Temp: 80°F";
-            document.getElementById("thermo-fill").style.height = "0%";
-
-            actionBtn.style.display = "inline-block";
-            actionBtn.textContent = "Start Cooking";
-
-            setTimeout(() => {
-              actionBtn.click();
-            }, 50);
-          };
         } else {
           playAgainBtn.style.display = "none";
           quizBtn.classList.add("btn-lg");
-          quizBtn.textContent = "🎓 You’re Ready — Take the Steak Quiz!";
+          quizBtn.style.display = "inline-block";
         }
       } else {
 
@@ -186,15 +244,10 @@ document.addEventListener("DOMContentLoaded", () => {
         playAgainBtn.textContent = "Try Again";
         playAgainBtn.style.display = "inline-block";
         playAgainBtn.onclick = () => {
-          document.getElementById("tempLabel").textContent = "Temp: 80°F";
-          document.getElementById("thermo-fill").style.height = "0%";
-          actionBtn.style.display = "inline-block";
-          actionBtn.textContent = "Start Cooking";
-
-          setTimeout(() => {
-            actionBtn.click();
-          }, 50);
-        };
+          resetSimulator();
+          actionBtn.style.display = "inline-block"; // Make sure it's visible
+          actionBtn.disabled = false;
+        };        
       }
 
       renderDonenessButtons(donenessLevels, donenessButtonsContainer, isCooking, targetLabel);

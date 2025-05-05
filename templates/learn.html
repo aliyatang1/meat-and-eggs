@@ -30,7 +30,7 @@
       {% for item in lesson.content | reverse %}
       <div class="card mx-3 flex-shrink-0" style="width: 280px;">
         <img src="{{ url_for('static', filename=item.image) }}"
-             class="steakcard-img-top" alt="{{ item.level }}">
+             class="steakcard-img-top mt-30" alt="{{ item.level }}">
         <div class="card-body">
           <h5 class="card-title font-weight-bold">{{ item.level }}</h5>
           <p class="card-text mb-1"><strong>{{ item.temp }}</strong> for <strong>{{ item.time }}</strong></p>
