@@ -36,9 +36,9 @@
         {% endif %}
         
         {% if question_id == total_questions %}
-        <a href="/results/{{ topic }}" id="submit-btn" class="submit-btn">Submit Quiz</a>
+        <button id="submit-btn" class="submit-btn inactive">Submit Quiz</button>
         {% else %}
-        <a href="/quiz/{{ topic }}/{{ question_id + 1 }}" id="next-btn" class="nav-btn next-btn">Next →</a>
+        <button id="next-btn" class="nav-btn next-btn inactive">Next →</button>
         {% endif %}
     </div>
 </div>
@@ -47,7 +47,7 @@
 {% block scripts %}
 <style>
     .quiz-container {
-        background-color: #FFF9F0; /* Warm off-white */
+        background-color: #FFF9F0;
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -64,35 +64,35 @@
         gap: 5px;
         margin-bottom: 5px;
         font-size: 0.9em;
-        color: #5E4D3A; /* Earthy brown text */
+        color: #5E4D3A;
     }
     
     .progress-bar {
         width: 100%;
         height: 8px;
-        background-color: #E0D7C8; /* Light beige */
+        background-color: #E0D7C8;
         border-radius: 4px;
         overflow: hidden;
     }
     
     .progress-fill {
         height: 100%;
-        background-color: #6C7A55; /* Muted green */
+        background-color: #6C7A55;
         transition: width 0.3s ease;
         border-radius: 4px;
     }
     
     .question-box {
-        border: 2px solid #A78A7F; /* Muted terracotta */
+        border: 2px solid #A78A7F;
         border-radius: 6px;
         padding: 15px;
         margin: 20px 0;
-        background-color: #F5F0E6; /* Warm cream */
+        background-color: #F5F0E6;
     }
     .question {
         font-size: 1.2em;
         font-weight: bold;
-        color: #5E4D3A; /* Earthy brown */
+        color: #5E4D3A;
     }
     .options {
         display: flex;
@@ -101,24 +101,24 @@
     }
     .option-btn {
         padding: 10px 15px;
-        background-color: #F0ECE1; /* Light warm gray */
-        border: 1px solid #D8D3B7; /* Soft beige */
+        background-color: #F0ECE1;
+        border: 1px solid #D8D3B7;
         border-radius: 4px;
         cursor: pointer;
         text-align: left;
         transition: all 0.3s;
-        color: #5E4D3A; /* Earthy brown */
+        color: #5E4D3A;
     }
     .option-btn:hover:not(.correct):not(.incorrect) {
-        background-color: #E0D7C8; /* Light beige */
+        background-color: #E0D7C8;
     }
     .option-btn.correct {
-        background-color: #8AA78D; /* Muted sage green */
+        background-color: #8AA78D;
         color: white;
         border-color: #6C7A55;
     }
     .option-btn.incorrect {
-        background-color: #C7A6A1; /* Muted terracotta pink */
+        background-color: #C7A6A1;
         color: white;
         border-color: #A78A7F;
     }
@@ -141,26 +141,30 @@
         transition: all 0.2s;
     }
     .back-btn {
-        background-color: #B8B2A3; /* Muted gray */
+        background-color: #B8B2A3;
         color: white;
     }
     .back-btn:hover {
-        background-color: #9C9687; /* Slightly darker gray */
+        background-color: #9C9687;
     }
     .back-btn.inactive {
-        background-color: #D8D3B7; /* Light beige */
+        background-color: #D8D3B7;
         cursor: not-allowed;
     }
     .next-btn {
-        background-color: #6C7A55; /* Muted green */
+        background-color: #D8D3B7; /* Light beige when inactive */
+        color: #5E4D3A;
+    }
+    .next-btn.active {
+        background-color: #6C7A55; /* Muted green when active */
         color: white;
     }
-    .next-btn:hover {
-        background-color: #5A6750; /* Darker muted green */
+    .next-btn.active:hover {
+        background-color: #5A6750;
     }
     .submit-btn {
-        background-color: #6C7A55; /* Muted green */
-        color: white;
+        background-color: #D8D3B7; /* Light beige when inactive */
+        color: #5E4D3A;
         padding: 10px 20px;
         border: none;
         border-radius: 4px;
@@ -168,8 +172,12 @@
         cursor: pointer;
         text-align: center;
     }
-    .submit-btn:hover {
-        background-color: #5A6750; /* Darker muted green */
+    .submit-btn.active {
+        background-color: #6C7A55; /* Muted green when active */
+        color: white;
+    }
+    .submit-btn.active:hover {
+        background-color: #5A6750;
     }
     .feedback-container {
         margin: 15px 0;
@@ -178,10 +186,10 @@
         font-style: italic;
     }
     .correct-feedback {
-        color: #6C7A55; /* Muted green */
+        color: #6C7A55;
     }
     .incorrect-feedback {
-        color: #c97759; /* Muted terracotta */
+        color: #c97759;
     }
 </style>
 
@@ -200,6 +208,7 @@
             selectedOption = currentAnswer;
             const isCorrect = (currentAnswer === correctAnswer);
             highlightAnswer(currentAnswer, isCorrect);
+            enableNavigation();
         }
     }
 
@@ -210,6 +219,7 @@
         const isCorrect = (option === correctAnswer);
         highlightAnswer(option, isCorrect);
         recordAnswer(option, isCorrect);
+        enableNavigation();
     }
 
     function highlightAnswer(option, isCorrect) {
@@ -233,6 +243,22 @@
         feedbackContainer.innerHTML = isCorrect ? 
             '<p class="correct-feedback">Correct!</p>' : 
             `<p class="incorrect-feedback">Incorrect. The correct answer is "${correctAnswer}"</p>`;
+    }
+
+    function enableNavigation() {
+        if (isLastQuestion) {
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.classList.add('active');
+            submitBtn.onclick = function() {
+                window.location.href = `/results/${topic}`;
+            };
+        } else {
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.classList.add('active');
+            nextBtn.onclick = function() {
+                window.location.href = `/quiz/${topic}/${questionId + 1}`;
+            };
+        }
     }
 
     async function recordAnswer(selectedOption, isCorrect) {
