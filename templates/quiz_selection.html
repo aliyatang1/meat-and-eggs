@@ -23,7 +23,7 @@
                     <img src="{{ url_for('static', filename='images/eggs-medium.jpg') }}" alt="Eggs" class="option-image">
                     <h2>Eggs Quiz</h2>
                     <p>Test your knowledge about egg cooking</p>
-                    <button class="btn btn-sm btn-outline-dark">Take Quiz</button>
+                    <button class="btn btn-sm btn-outline-accent">Take Quiz</button>
                 </div>
             </a>
         </div>
@@ -65,14 +65,14 @@
     }
     
     .meat {
-        background-color: #dc3545;
-        background-image: linear-gradient(135deg, #dc3545, #a71d2a);
+        background-color: #6C7A55;
+        background-image: linear-gradient(135deg, #6C7A55, #5A6750);
     }
     
     .eggs {
-        background-color: #ffc107;
-        background-image: linear-gradient(135deg, #ffc107, #e0a800);
-        color: #212529;
+        background-color: #A78A7F;
+        background-image: linear-gradient(135deg, #A78A7F, #8C726A);
+        color: #fdfaf5;
     }
     
     .option-content {
@@ -93,17 +93,47 @@
     .quiz-option h2 {
         margin-bottom: 10px;
         font-size: 1.5em;
+        transition: color 0.3s;
+    }
+    
+    .quiz-option:hover h2 {
+        color: #FFF0DB !important; /* Changed from blue to your beige color */
     }
     
     .quiz-option p {
         margin-bottom: 15px;
         opacity: 0.9;
         flex-grow: 1;
+        transition: color 0.3s;
+    }
+    
+    .quiz-option:hover p {
+        color: #FFF0DB !important; /* Changed from blue to your beige color */
     }
     
     .quiz-option .btn {
         margin-top: auto;
         width: 120px;
+    }
+    
+    .meat .btn-outline-light {
+        border-color: #fdfaf5;
+        color: #fdfaf5;
+    }
+    
+    .meat .btn-outline-light:hover {
+        background-color: #fdfaf5;
+        color: #6C7A55;
+    }
+    
+    .eggs .btn-outline-accent {
+        border-color: #fdfaf5;
+        color: #fdfaf5;
+    }
+    
+    .eggs .btn-outline-accent:hover {
+        background-color: #fdfaf5;
+        color: #A78A7F;
     }
 </style>
 {% endblock %}
