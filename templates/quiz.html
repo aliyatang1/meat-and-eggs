@@ -19,10 +19,14 @@
     </div>
     <div class="options" id="options-container">
         {% for option in question.options %}
-            <button class="option-btn" data-option="{{ option }}" onclick="selectAnswer('{{ option }}')">{{ option }}</button>
+            <button class="option-btn" 
+                    data-option="{{ option }}" 
+                    onclick="selectAnswer('{{ option }}')"
+                    {% if session.get('quiz_answers', {}).get(topic, {}).get(question_id|string) == option %}data-selected="true"{% endif %}>
+                {{ option }}
+            </button>
         {% endfor %}
     </div>
-    <!-- Feedback container added here -->
     <div id="feedback-container" class="feedback-container"></div>
     <div class="nav-buttons">
         {% if question_id > 1 %}
@@ -32,9 +36,9 @@
         {% endif %}
         
         {% if question_id == total_questions %}
-        <button id="submit-btn" class="submit-btn inactive">Submit Quiz</button>
+        <a href="/results/{{ topic }}" id="submit-btn" class="submit-btn">Submit Quiz</a>
         {% else %}
-        <button id="next-btn" class="nav-btn next-btn inactive">Next →</button>
+        <a href="/quiz/{{ topic }}/{{ question_id + 1 }}" id="next-btn" class="nav-btn next-btn">Next →</a>
         {% endif %}
     </div>
 </div>
@@ -73,7 +77,7 @@
     
     .progress-fill {
         height: 100%;
-        background-color: #28a745; /* Green color */
+        background-color: #28a745;
         transition: width 0.3s ease;
         border-radius: 4px;
     }
@@ -116,9 +120,8 @@
         color: white;
         border-color: #dc3545;
     }
-    .option-btn.selected:not(.correct):not(.incorrect) {
-        background-color: #007BFF;
-        color: white;
+    .option-btn.answered {
+        cursor: default;
     }
     .nav-buttons {
         display: flex;
@@ -135,29 +138,22 @@
         text-align: center;
     }
     .back-btn {
-        background-color: #ff6b6b; /* Red color for back button */
+        background-color: #ff6b6b;
         color: white;
     }
     .back-btn.inactive {
-        background-color: #ffcccc; /* Light red for inactive back button */
+        background-color: #ffcccc;
         cursor: not-allowed;
     }
     .back-btn:not(.inactive):hover {
-        background-color: #ff5252; /* Darker red on hover */
+        background-color: #ff5252;
     }
     .next-btn {
-        background-color: #28a745; /* Green color for next button */
+        background-color: #28a745;
         color: white;
     }
-    .next-btn.inactive {
-        background-color: #cccccc;
-        cursor: not-allowed;
-    }
-    .next-btn:not(.inactive):hover {
-        background-color: #218838; /* Darker green on hover */
-    }
     .submit-btn {
-        background-color: #28a745; /* Green color for submit button */
+        background-color: #28a745;
         color: white;
         padding: 10px 20px;
         border: none;
@@ -165,17 +161,8 @@
         font-size: 1em;
         cursor: pointer;
         text-align: center;
-        box-shadow: none !important; /* Remove shadow */
+        box-shadow: none !important;
     }
-    .submit-btn.inactive {
-        background-color: #d1e7d1; /* Very light green */
-        color: #666;
-        cursor: not-allowed;
-    }
-    .submit-btn:not(.inactive):hover {
-        background-color: #218838; /* Darker green when active */
-    }
-    /* Feedback styles */
     .feedback-container {
         margin: 15px 0;
         padding: 10px;
@@ -194,60 +181,50 @@
     const topic = "{{ topic }}";
     const questionId = {{ question_id }};
     const isLastQuestion = questionId === {{ total_questions }};
-    let selectedOption = null;
     const correctAnswer = "{{ question.correct_answer }}";
+    let selectedOption = null;
+
+    function initializeQuiz() {
+        // Check if this question was already answered
+        const currentAnswer = "{{ session.get('quiz_answers', {}).get(topic, {}).get(question_id|string, '') }}";
+        
+        if (currentAnswer) {
+            selectedOption = currentAnswer;
+            const isCorrect = (currentAnswer === correctAnswer);
+            highlightAnswer(currentAnswer, isCorrect);
+        }
+    }
 
     function selectAnswer(option) {
-        if (selectedOption) return; // Prevent changing answer after selection
+        if (selectedOption) return;
         
-        // Remove selected class from all buttons
+        selectedOption = option;
+        const isCorrect = (option === correctAnswer);
+        highlightAnswer(option, isCorrect);
+        recordAnswer(option, isCorrect);
+    }
+
+    function highlightAnswer(option, isCorrect) {
+        // Mark all buttons as answered
         document.querySelectorAll('.option-btn').forEach(btn => {
-            btn.classList.remove('selected');
+            btn.classList.add('answered');
+            btn.classList.remove('selected', 'correct', 'incorrect');
         });
         
-        // Add selected class to clicked button
-        event.target.classList.add('selected');
+        // Highlight selected answer
+        const selectedBtn = document.querySelector(`.option-btn[data-option="${option}"]`);
+        selectedBtn.classList.add(isCorrect ? 'correct' : 'incorrect');
         
-        // Store the selected option
-        selectedOption = option;
-        
-        // Check if answer is correct
-        const isCorrect = (option === correctAnswer);
-        
-        // Highlight the selected answer
-        if (isCorrect) {
-            event.target.classList.add('correct');
-        } else {
-            event.target.classList.add('incorrect');
-            // Also highlight the correct answer
-            document.querySelectorAll('.option-btn').forEach(btn => {
-                if (btn.dataset.option === correctAnswer) {
-                    btn.classList.add('correct');
-                }
-            });
+        // Show correct answer if wrong
+        if (!isCorrect) {
+            document.querySelector(`.option-btn[data-option="${correctAnswer}"]`).classList.add('correct');
         }
         
         // Show feedback
         const feedbackContainer = document.getElementById('feedback-container');
-        if (isCorrect) {
-            feedbackContainer.innerHTML = '<p class="correct-feedback">Correct!</p>';
-        } else {
-            feedbackContainer.innerHTML = `<p class="incorrect-feedback">Wrong, the correct answer is "${correctAnswer}"</p>`;
-        }
-        
-        // Activate navigation button immediately
-        if (isLastQuestion) {
-            const submitBtn = document.getElementById('submit-btn');
-            submitBtn.classList.remove('inactive');
-            submitBtn.disabled = false;
-        } else {
-            const nextBtn = document.getElementById('next-btn');
-            nextBtn.classList.remove('inactive');
-            nextBtn.disabled = false;
-        }
-        
-        // Record the answer (optional - if you want to log immediately)
-        recordAnswer(option, isCorrect);
+        feedbackContainer.innerHTML = isCorrect ? 
+            '<p class="correct-feedback">Correct!</p>' : 
+            `<p class="incorrect-feedback">Incorrect. The correct answer is "${correctAnswer}"</p>`;
     }
 
     async function recordAnswer(selectedOption, isCorrect) {
@@ -267,39 +244,7 @@
         }
     }
 
-    async function recordAnswerAndProceed() {
-        if (!selectedOption) return;
-        
-        try {
-            // Proceed to next question or results
-            if (isLastQuestion) {
-                window.location.href = `/results/${topic}`;
-            } else {
-                window.location.href = `/quiz/${topic}/${questionId + 1}`;
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            // Fallback navigation if request fails
-            if (isLastQuestion) {
-                window.location.href = `/results/${topic}`;
-            } else {
-                window.location.href = `/quiz/${topic}/${questionId + 1}`;
-            }
-        }
-    }
-
-    // Initialize button states and event listeners
-    document.addEventListener('DOMContentLoaded', function() {
-        const nextBtn = isLastQuestion ? 
-            document.getElementById('submit-btn') : 
-            document.getElementById('next-btn');
-        
-        nextBtn.addEventListener('click', recordAnswerAndProceed);
-        
-        // Enable back button if not first question
-        if (questionId > 1) {
-            document.getElementById('prev-btn').disabled = false;
-        }
-    });
+    // Initialize the quiz when page loads
+    document.addEventListener('DOMContentLoaded', initializeQuiz);
 </script>
 {% endblock %}

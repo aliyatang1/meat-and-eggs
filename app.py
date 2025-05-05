@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import os
 import json
 from datetime import datetime
@@ -46,22 +46,27 @@ def quiz_selection():
 @app.route('/quiz/<topic>/<int:question_id>')
 def quiz(topic, question_id):
     quiz_data = load_json(f'quiz_{topic}.json')
+    total_questions = len(quiz_data)
+    
+    # Ensure question_id is within bounds
+    if question_id < 1:
+        return redirect(url_for('quiz_selection'))
+    if question_id > total_questions:
+        return redirect(url_for('show_results', topic=topic))
+    
     question = quiz_data.get(str(question_id))
     
-    if not question:
-        # Calculate score when quiz is completed
-        correct_count = session.get(f'{topic}_score', 0)
-        total_questions = len(quiz_data)
-        return render_template('results.html',
-                            topic=topic,
-                            correct_count=correct_count,
-                            total_questions=total_questions)
+    # Initialize session data if not exists
+    if 'quiz_answers' not in session:
+        session['quiz_answers'] = {}
+    if topic not in session['quiz_answers']:
+        session['quiz_answers'][topic] = {}
     
     return render_template('quiz.html',
                          topic=topic,
                          question_id=question_id,
                          question=question,
-                         total_questions=len(quiz_data))
+                         total_questions=total_questions)
 
 @app.route('/submit_answer', methods=['POST'])
 def submit_answer():
@@ -69,29 +74,35 @@ def submit_answer():
     topic = data['topic']
     question_id = str(data['question_id'])
     user_answer = data['answer']
+    is_correct = data['correct']
     
-    # Load quiz data and correct answer
-    quiz_data = load_json(f'quiz_{topic}.json')
-    correct_answer = quiz_data[question_id]['correct_answer']
+    # Initialize session data if not exists
+    if 'quiz_answers' not in session:
+        session['quiz_answers'] = {}
+    if topic not in session['quiz_answers']:
+        session['quiz_answers'][topic] = {}
     
-    # Check if answer is correct
-    is_correct = (user_answer == correct_answer)
+    # Save the answer
+    session['quiz_answers'][topic][question_id] = user_answer
+    session.modified = True
     
-    # Update session score
+    # Update score if correct
     if is_correct:
-        session[f'{topic}_score'] = session.get(f'{topic}_score', 0) + 1
+        if f'{topic}_score' not in session:
+            session[f'{topic}_score'] = 0
+        session[f'{topic}_score'] += 1
     
     # Log the answer
     user_logs['quiz_answers'].append({
         'topic': topic,
         'question_id': question_id,
         'user_answer': user_answer,
-        'correct_answer': correct_answer,
-        'correct': is_correct
+        'correct': is_correct,
+        'timestamp': datetime.now().isoformat()
     })
     save_user_logs()
     
-    return jsonify(success=True, correct=is_correct)
+    return jsonify(success=True)
 
 @app.route('/results/<topic>')
 def show_results(topic):
@@ -100,13 +111,20 @@ def show_results(topic):
     quiz_data = load_json(f'quiz_{topic}.json')
     total_questions = len(quiz_data)
     
-    # Clear the session score
+    # Calculate percentage
+    percentage = round((correct_count / total_questions) * 100) if total_questions > 0 else 0
+    
+    # Clear the session data for this quiz
+    if 'quiz_answers' in session and topic in session['quiz_answers']:
+        session['quiz_answers'].pop(topic, None)
     session.pop(f'{topic}_score', None)
+    session.modified = True
     
     return render_template('results.html',
                          topic=topic,
                          correct_count=correct_count,
-                         total_questions=total_questions)
+                         total_questions=total_questions,
+                         percentage=percentage)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
