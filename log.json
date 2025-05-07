@@ -4,44 +4,44 @@
         {
             "topic": "meat",
             "question_id": "1",
-            "user_answer": "135\u00b0F",
-            "correct_answer": "135\u00b0F",
-            "correct": true
-        },
-        {
-            "topic": "meat",
-            "question_id": "1",
-            "user_answer": "135\u00b0F",
-            "correct_answer": "135\u00b0F",
-            "correct": true
+            "user_answer": "145\u00b0F",
+            "correct": false,
+            "timestamp": "2025-05-05T16:20:40.372389"
         },
         {
             "topic": "meat",
             "question_id": "2",
             "user_answer": "2\u20133 minutes",
-            "correct_answer": "6\u20137 minutes",
-            "correct": false
+            "correct": false,
+            "timestamp": "2025-05-05T16:21:02.876506"
         },
         {
             "topic": "meat",
             "question_id": "3",
-            "user_answer": "Medium",
-            "correct_answer": "Medium",
-            "correct": true
+            "user_answer": "Well Done",
+            "correct": false,
+            "timestamp": "2025-05-05T16:21:59.173634"
         },
         {
             "topic": "meat",
             "question_id": "4",
             "user_answer": "Warm red-pink center, tender and juicy",
-            "correct_answer": "Cool red center, very soft and moist",
-            "correct": false
+            "correct": false,
+            "timestamp": "2025-05-05T16:22:36.943563"
         },
         {
             "topic": "meat",
             "question_id": "5",
-            "user_answer": "3\u20134 minutes",
-            "correct_answer": "5\u20136 minutes",
-            "correct": false
+            "user_answer": "5\u20136 minutes",
+            "correct": true,
+            "timestamp": "2025-05-05T16:22:47.160175"
+        },
+        {
+            "topic": "meat",
+            "question_id": "1",
+            "user_answer": "145\u00b0F",
+            "correct": false,
+            "timestamp": "2025-05-05T16:26:21.811613"
         }
     ],
     "simulator_actions": []

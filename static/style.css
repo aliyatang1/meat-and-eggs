@@ -241,7 +241,7 @@ body {
 
 
 
-/* simulator styling */
+/* steak simulator styling */
 
 .levels{
   display: inline;
@@ -393,4 +393,27 @@ body {
 
 .doneness-btn.completed::after {
   content: " ✅";
+}
+
+
+/* egg simulator styling */
+/* .egg-img {
+  position: absolute;
+  top: 60%;
+  left: 35%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: auto;
+  pointer-events: none;
+} */
+
+.egg-img {
+  position: absolute;
+  top: 60%;
+  left: 35%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  pointer-events: none;
 }

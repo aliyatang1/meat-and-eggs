@@ -1,4 +1,39 @@
 {% extends "layout.html" %}
+
 {% block content %}
-  <h2>Egg Simulator</h2>
+<div class="text-center mt-4">
+  <h2 id="cook">Cook your egg to: <span id="targetDoneness" class="text-accent"></span></h2>
+
+  <div id="donenessSelector" class="doneness-list text-center">
+    <div id="donenessButtons" class="d-flex flex-wrap justify-content-center"></div>
+  </div>  
+
+  <h5 class="mt-1 mb-1 text-muted" id="cookingTimerWrapper">Time: <span id="cookingTimer">0 min</span></h5>
+  
+  <div class="d-flex justify-content-center align-items-center gap-3">
+    <button id="startBtn" class="btn btn-accent btn-lg mt-1 mb-0">Start Cooking</button>
+    <button id="flipBtn" class="btn btn-outline-accent btn-lg mt-1 mb-0">Flip Egg</button>
+  </div>
+</div>
+
+<div id="donenessProgress" class="text-center mt-0 mb-0 text-muted"></div>
+
+<div class="simulator-row d-flex justify-content-center flex-wrap align-items-start gap-4" style="margin-top: 0rem;">
+  <div id="resultContainer" style="display: none;">
+    <div id="resultMsg"></div>
+    <div class="mt-3" id="resultButtons">
+      <button id="playAgainBtn" class="btn btn-outline-accent">Play Again</button>
+      <a href="/quiz/eggs/1" id="quizBtn" class="btn btn-accent" style="display: none;">Take the Egg Quiz</a>
+    </div>
+  </div>
+
+    <div class="simulator-wrapper">
+      <img src="{{ url_for('static', filename='images/pan.png') }}" class="pan-img" alt="Pan">
+      <img id="eggImage" src="{{ url_for('static', filename='images/eggsim-raw.png') }}" class="egg-img" alt="Egg">
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='egg_simulator.js') }}"></script>
+<audio id="sizzleSound" src="/static/sounds/sizzle.mp3" preload="auto"></audio>
 {% endblock %}
