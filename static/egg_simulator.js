@@ -94,9 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const inRange = (actual, min) => actual >= min && actual <= min + 20;
   
     if (!hasBeenFlipped) {
-      if (inRange(aTime, 180)) return "Sunny Side Up";
+      if (inRange(aTime, 120, 0)) return "Sunny Side Up"; // Show image exactly at 2:00
       return "Raw";
-    }
+    }    
   
     const easyA = inRange(aTime, 120) && inRange(bTime, 30, 10);
     const easyB = inRange(bTime, 120) && inRange(aTime, 30, 10);
@@ -115,10 +115,10 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "Sunny Side Up",
       img: "eggsim-sunny.png",
       desc: "Whites set, yolk runny.",
-      sideASeconds: 180,
-      sideAMaxSeconds: 240,
+      sideASeconds: 120,       // Acceptable from 2:00...
+      sideAMaxSeconds: 180,    // ...to 3:00
       sideBSeconds: 0
-    },
+    },    
     {
       name: "Over Easy",
       img: "eggsim-overeasy.png",
@@ -306,6 +306,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       
 // Track and update egg doneness stage without regressing
+const stageOrder = [
+  "eggsim-raw.png",
+  "eggsim-sunny.png",
+  "eggsim-overeasy.png",
+  "eggsim-overmedium.png",
+  "eggsim-overhard.png"
+];
+
 const newState = getCurrentDonenessStage(sideATime, sideBTime, hasBeenFlipped);
 
 const newStageMap = {
@@ -318,10 +326,12 @@ const newStageMap = {
 
 const newStage = newStageMap[newState];
 
-if (newStage !== currentEggStage) {
+// ✅ Prevent regression: only update if we move *forward* in doneness
+if (stageOrder.indexOf(newStage) > stageOrder.indexOf(currentEggStage)) {
   currentEggStage = newStage;
   eggImage.src = `/static/images/${newStage}`;
 }
+
 
                                 
       }, 1000);          
