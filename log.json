@@ -7,6 +7,34 @@
             "user_answer": "160\u00b0F",
             "correct": false,
             "timestamp": "2025-05-08T12:47:02.326801"
+        },
+        {
+            "topic": "meat",
+            "question_id": "2",
+            "user_answer": "3\u20134 minutes",
+            "correct": false,
+            "timestamp": "2025-05-08T14:17:41.324043"
+        },
+        {
+            "topic": "meat",
+            "question_id": "3",
+            "user_answer": "Medium Well",
+            "correct": false,
+            "timestamp": "2025-05-08T14:17:49.113931"
+        },
+        {
+            "topic": "meat",
+            "question_id": "4",
+            "user_answer": "Cool red center, very soft and moist",
+            "correct": true,
+            "timestamp": "2025-05-08T14:17:57.589395"
+        },
+        {
+            "topic": "meat",
+            "question_id": "5",
+            "user_answer": "4\u20135 minutes",
+            "correct": false,
+            "timestamp": "2025-05-08T14:17:59.525341"
         }
     ],
     "simulator_actions": []

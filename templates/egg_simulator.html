@@ -32,10 +32,15 @@
     </div>
   </div>
 
-    <div class="simulator-wrapper">
-      <img src="{{ url_for('static', filename='images/pan.png') }}" class="pan-img" alt="Pan">
+  <div class="simulator-wrapper">
+    <img src="{{ url_for('static', filename='images/pan.png') }}" class="pan-img" alt="Pan">
+    
+    <!-- Wrap eggImage in a container div -->
+    <div class="egg-container">
       <img id="eggImage" src="{{ url_for('static', filename='images/eggsim-raw.png') }}" class="egg-img" alt="Egg">
     </div>
+  </div>
+  
   </div>
 </div>
 

@@ -35,7 +35,7 @@ function renderDonenessButtons(donenessLevels, container, isCooking, targetLabel
     btn.dataset.doneness = level.name;
 
     const isDone = completedLevels.has(level.name);
-    btn.innerHTML = isDone ? `${level.name} ✓` : level.name;
+    btn.innerHTML = isDone ? `${level.name} \u2713` : level.name;
 
     if (target?.name === level.name) {
       btn.classList.remove("btn-outline-accent");
@@ -91,14 +91,15 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       name: "Sunny Side Up",
       img: "eggsim-sunny.png",
-      desc: "Whites set; yolk runny.",
+      desc: "Whites set, yolk runny.",
       sideASeconds: 180,
+      sideAMaxSeconds: 240,
       sideBSeconds: 0
     },
     {
       name: "Over Easy",
       img: "eggsim-overeasy.png",
-      desc: "Flipped briefly; runny yolk.",
+      desc: "runny yolk.",
       sideASeconds: 120,
       sideBMinSeconds: 30,
       sideBMaxSeconds: 60
@@ -119,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
       sideBMinSeconds: 120,
       sideBMaxSeconds: 180
     }
-  ];  
+  ];
 
   const burnt = { name: "Burnt", img: "steaksim-burnt.png", desc: "Charred and rubbery." };
   const secondsPerRealMinute = 6;
@@ -147,6 +148,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const playAgainBtn = document.getElementById("playAgainBtn");
   const quizBtn = document.getElementById("quizBtn");
 
+  function isCorrectlyCooked(target, aTime, bTime, hasBeenFlipped) {
+    if (target.name === "Sunny Side Up") {
+      return !hasBeenFlipped && aTime >= target.sideASeconds && aTime <= target.sideAMaxSeconds;
+    }
+
+    if (target.name === "Over Easy") {
+      const longMin = 100, longMax = 140;
+      const shortMin = 30, shortMax = 60;
+
+      const side1Valid = aTime >= longMin && aTime <= longMax && bTime >= shortMin && bTime <= shortMax;
+      const side2Valid = bTime >= longMin && bTime <= longMax && aTime >= shortMin && aTime <= shortMax;
+
+      return hasBeenFlipped && (side1Valid || side2Valid);
+    }
+
+    if (target.name === "Over Medium") {
+      const min = 100, max = 140;
+      return hasBeenFlipped &&
+        ((aTime >= min && aTime <= max) && (bTime >= min && bTime <= max));
+    }
+
+    if (target.name === "Over Hard") {
+      const min = 100, max = 180;
+      return hasBeenFlipped &&
+        ((aTime >= min && aTime <= max) && (bTime >= min && bTime <= max));
+    }
+
+    return false;
+  }
+
   const isCooking = () => _isCooking;
 
   target = donenessLevels[0];
@@ -170,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
       sizzleSound.pause();
       sizzleSound.currentTime = 0;
       sizzleSound.volume = 1;
-      sizzleSound.play().catch(e => console.warn("🔊 Sizzle play blocked:", e));
+      sizzleSound.play().catch(e => console.warn("\uD83D\uDD0A Sizzle play blocked:", e));
 
       timerInterval = setInterval(() => {
         elapsedSeconds += simulatedSecondsPerTick;
@@ -193,23 +224,24 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 1000);
 
       interval = setInterval(() => {
-        // Determine latest eligible level based on total simulated cook time
-        const totalCookTime = sideATime + sideBTime;
-      
-        const current = [...donenessLevels].reverse().find(level => {
-          if (level.name === "Sunny Side Up") return totalCookTime >= level.sideASeconds;
-          if (level.name === "Over Easy") return totalCookTime >= level.sideASeconds + level.sideBMinSeconds;
-          if (level.name === "Over Medium") return totalCookTime >= level.sideASeconds + level.sideBSeconds;
-          if (level.name === "Over Hard") return totalCookTime >= level.sideAMinSeconds + level.sideBMinSeconds;
-        });
-      
-        if (elapsedSeconds >= burntTime) {
-          eggImage.src = `/static/images/${burnt.img}`;
+        if (
+          elapsedSeconds >= burntTime ||
+          (target.name === "Sunny Side Up" && !hasBeenFlipped && sideATime > 240)
+        ) {
+          eggImage.src = "/static/images/steaksim-burnt.png";
           clearInterval(interval);
           clearInterval(timerInterval);
           fadeOutAudio(sizzleSound, 1000);
+      
           actionBtn.style.display = "none";
-          resultMsg.textContent = "Merry Christmas, you got a block of charcoal.";
+          flipBtn.style.display = "none";
+      
+          let burnReason = "Merry Christmas, you got a block of charcoal.";
+          if (target.name === "Sunny Side Up" && !hasBeenFlipped && sideATime > 240) {
+            burnReason = "You cooked it too long on one side and now it's burnt. Try flipping it next time!";
+          }
+      
+          resultMsg.textContent = burnReason;
           resultContainer.style.display = "block";
           playAgainBtn.textContent = "Try Again";
           playAgainBtn.style.display = "inline-block";
@@ -219,63 +251,27 @@ document.addEventListener("DOMContentLoaded", () => {
             actionBtn.disabled = false;
           };
           _isCooking = false;
-        } else if (current && !(current.name === "Sunny Side Up" && hasBeenFlipped)) {
-          eggImage.src = `/static/images/${current.img}`;
+          return;
         }
-      }, 1000);      
+      
+        // ✅ Improved: Only update image if egg was cooked correctly
+        if (isCorrectlyCooked(target, sideATime, sideBTime, hasBeenFlipped)) {
+          eggImage.src = `/static/images/${target.img}`;
+        }                          
+      }, 1000);          
     } else {
       clearInterval(interval);
       clearInterval(timerInterval);
       fadeOutAudio(sizzleSound, 1000);
       actionBtn.style.display = "none";
-      flipBtn.style.display = "none";
+      flipBtn.style.display = "none";     
 
-      function isCorrectlyCooked(target, aTime, bTime) {
-        if (target.name === "Sunny Side Up") {
-          return !hasBeenFlipped && aTime >= target.sideASeconds;
-        }
-        if (target.name === "Over Easy") {
-          return (
-            hasBeenFlipped &&
-            aTime >= target.sideASeconds &&
-            bTime >= target.sideBMinSeconds &&
-            bTime <= target.sideBMaxSeconds
-          );
-        }
-        if (target.name === "Over Medium") {
-          return (
-            hasBeenFlipped &&
-            aTime >= target.sideASeconds &&
-            bTime >= target.sideBSeconds
-          );
-        }
-        if (target.name === "Over Hard") {
-          return (
-            hasBeenFlipped &&
-            aTime >= target.sideAMinSeconds &&
-            aTime <= target.sideAMaxSeconds &&
-            bTime >= target.sideBMinSeconds &&
-            bTime <= target.sideBMaxSeconds
-          );
-        }
-        return false;
-      }
-      
-      const totalCookTime = sideATime + sideBTime;
-const userLevel = [...donenessLevels].reverse().find(level => {
-  if (level.name === "Sunny Side Up") return totalCookTime >= level.sideASeconds;
-  if (level.name === "Over Easy") return totalCookTime >= level.sideASeconds + level.sideBMinSeconds;
-  if (level.name === "Over Medium") return totalCookTime >= level.sideASeconds + level.sideBSeconds;
-  if (level.name === "Over Hard") return totalCookTime >= level.sideAMinSeconds + level.sideBMinSeconds;
-});
+      const cookedCorrectly = isCorrectlyCooked(target, sideATime, sideBTime, hasBeenFlipped);
 
-
-      const cookedCorrectly = isCorrectlyCooked(target, sideATime, sideBTime);
-      
       let resultText = "";
-      if (cookedCorrectly) {      
+      if (cookedCorrectly) {
         completedLevels.add(target.name);
-        resultText = `You nailed it! <br><br>This egg is cooked ${target.name.toLowerCase()}.`;
+        resultText = `You’re an egg-spert now! <br><br>This egg is cooked ${target.name.toLowerCase()}.`;
 
         const nextUncompleted = donenessLevels.find(level => !completedLevels.has(level.name));
         if (nextUncompleted) {
@@ -296,8 +292,25 @@ const userLevel = [...donenessLevels].reverse().find(level => {
           quizBtn.style.display = "inline-block";
         }
       } else {
-        resultText = `You ended up with ${userLevel?.name || "a raw egg"} — description: ${userLevel?.desc || "barely cooked whites, runny yolk."}<br><br> A proper ${target.name} egg should be cooked ${target.desc}`;
-
+        resultText = "You cracked under pressure 🫠<br><br>";
+      
+        let cookTimeText = "";
+        if (target.name === "Sunny Side Up") {
+          cookTimeText = `about ${Math.round(target.sideASeconds / 60)} minutes on one side`;
+        } else if (target.name === "Over Easy") {
+          cookTimeText = `about 2 minutes on one side and 30–60 seconds on the other`;
+        } else if (target.name === "Over Medium") {
+          cookTimeText = `about 2 minutes per side`;
+        } else if (target.name === "Over Hard") {
+          cookTimeText = `about 2–3 minutes per side`;
+        }
+      
+        resultText += `A proper ${target.name} egg should be cooked for ${cookTimeText}.<br><br>`;
+        resultText += `Key features: ${target.desc.toLowerCase()}`;
+      
+        resultMsg.innerHTML = resultText;
+        resultContainer.style.display = "block";
+      
         playAgainBtn.textContent = "Try Again";
         playAgainBtn.style.display = "inline-block";
         playAgainBtn.onclick = () => {
@@ -305,7 +318,7 @@ const userLevel = [...donenessLevels].reverse().find(level => {
           actionBtn.style.display = "inline-block";
           actionBtn.disabled = false;
         };
-      }
+      }      
 
       renderDonenessButtons(donenessLevels, donenessButtonsContainer, isCooking, targetLabel);
       resultMsg.innerHTML = resultText;
@@ -315,7 +328,12 @@ const userLevel = [...donenessLevels].reverse().find(level => {
   });
 
   flipBtn.addEventListener("click", () => {
+    console.log('some message');
     currentSide = currentSide === 'A' ? 'B' : 'A';
     hasBeenFlipped = true;
+  
+    const egg = document.getElementById("eggImage");
+    egg.classList.toggle("egg-flipped");
   });
+  
 });
