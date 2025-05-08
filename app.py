@@ -43,34 +43,40 @@ def simulator(type):
 def quiz_selection():
     return render_template('quiz_selection.html')
 
+@app.route('/reset')
+def reset():
+    session.clear()
+    return "Session cleared"
+
 @app.route('/quiz/<topic>/<int:question_id>')
 def quiz(topic, question_id):
     quiz_data = load_json(f'quiz_{topic}.json')
     total_questions = len(quiz_data)
-    
+
     if question_id < 1:
         return redirect(url_for('quiz_selection'))
     if question_id > total_questions:
         return redirect(url_for('show_results', topic=topic))
-    
-    question = quiz_data.get(str(question_id))
-    
-    # Initialize session data if not exists
+
+    # ensure quiz_answers are in session
     if 'quiz_answers' not in session:
         session['quiz_answers'] = {}
     if topic not in session['quiz_answers']:
         session['quiz_answers'][topic] = {}
 
-    # ✅ Get current answer for this question
+    # Load question
     qid_str = str(question_id)
-    current_answer = session['quiz_answers'][topic].get(qid_str, '')
+    question = quiz_data.get(qid_str)
+
+    # Inject user's answer if it exists
+    current_answer = session['quiz_answers'][topic].get(qid_str, None)
 
     return render_template('quiz.html',
-                         topic=topic,
-                         question_id=question_id,
-                         question=question,
-                         total_questions=total_questions,
-                         current_answer=current_answer)  # ✅ pass to template
+                           topic=topic,
+                           question_id=question_id,
+                           question=question,
+                           total_questions=total_questions,
+                           current_answer=current_answer)
 
 
 @app.route('/submit_answer', methods=['POST'])
