@@ -4,44 +4,9 @@
         {
             "topic": "meat",
             "question_id": "1",
-            "user_answer": "145\u00b0F",
+            "user_answer": "125\u00b0F",
             "correct": false,
-            "timestamp": "2025-05-05T16:20:40.372389"
-        },
-        {
-            "topic": "meat",
-            "question_id": "2",
-            "user_answer": "2\u20133 minutes",
-            "correct": false,
-            "timestamp": "2025-05-05T16:21:02.876506"
-        },
-        {
-            "topic": "meat",
-            "question_id": "3",
-            "user_answer": "Well Done",
-            "correct": false,
-            "timestamp": "2025-05-05T16:21:59.173634"
-        },
-        {
-            "topic": "meat",
-            "question_id": "4",
-            "user_answer": "Warm red-pink center, tender and juicy",
-            "correct": false,
-            "timestamp": "2025-05-05T16:22:36.943563"
-        },
-        {
-            "topic": "meat",
-            "question_id": "5",
-            "user_answer": "5\u20136 minutes",
-            "correct": true,
-            "timestamp": "2025-05-05T16:22:47.160175"
-        },
-        {
-            "topic": "meat",
-            "question_id": "1",
-            "user_answer": "145\u00b0F",
-            "correct": false,
-            "timestamp": "2025-05-05T16:26:21.811613"
+            "timestamp": "2025-05-07T22:37:38.818972"
         }
     ],
     "simulator_actions": []

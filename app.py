@@ -48,7 +48,6 @@ def quiz(topic, question_id):
     quiz_data = load_json(f'quiz_{topic}.json')
     total_questions = len(quiz_data)
     
-    # Ensure question_id is within bounds
     if question_id < 1:
         return redirect(url_for('quiz_selection'))
     if question_id > total_questions:
@@ -61,12 +60,18 @@ def quiz(topic, question_id):
         session['quiz_answers'] = {}
     if topic not in session['quiz_answers']:
         session['quiz_answers'][topic] = {}
-    
+
+    # ✅ Get current answer for this question
+    qid_str = str(question_id)
+    current_answer = session['quiz_answers'][topic].get(qid_str, '')
+
     return render_template('quiz.html',
                          topic=topic,
                          question_id=question_id,
                          question=question,
-                         total_questions=total_questions)
+                         total_questions=total_questions,
+                         current_answer=current_answer)  # ✅ pass to template
+
 
 @app.route('/submit_answer', methods=['POST'])
 def submit_answer():

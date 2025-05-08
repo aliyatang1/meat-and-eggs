@@ -22,7 +22,8 @@
             <button class="option-btn" 
                     data-option="{{ option }}" 
                     onclick="selectAnswer('{{ option }}')"
-                    {% if session.get('quiz_answers', {}).get(topic, {}).get(question_id|string) == option %}data-selected="true"{% endif %}>
+                    {% if current_answer == option %}
+                    data-selected="true"{% endif %}>
                 {{ option }}
             </button>
         {% endfor %}
@@ -202,7 +203,7 @@
 
     function initializeQuiz() {
         // Check if this question was already answered
-        const currentAnswer = "{{ session.get('quiz_answers', {}).get(topic, {}).get(question_id|string, '') }}";
+        const currentAnswer = "{{ current_answer }}";
         
         if (currentAnswer) {
             selectedOption = currentAnswer;
