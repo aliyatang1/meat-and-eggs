@@ -4,9 +4,9 @@
         {
             "topic": "meat",
             "question_id": "1",
-            "user_answer": "135\u00b0F",
-            "correct": true,
-            "timestamp": "2025-05-07T23:05:01.202291"
+            "user_answer": "160\u00b0F",
+            "correct": false,
+            "timestamp": "2025-05-08T12:47:02.326801"
         }
     ],
     "simulator_actions": []

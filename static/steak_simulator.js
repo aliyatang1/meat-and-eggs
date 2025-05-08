@@ -35,7 +35,7 @@ function renderDonenessButtons(donenessLevels, donenessButtonsContainer, isCooki
     btn.dataset.doneness = level.name;
 
     const isDone = completedLevels.has(level.name);
-    btn.innerHTML = isDone ? `${level.name} ✅` : level.name;
+    btn.innerHTML = isDone ? `${level.name} ✓` : level.name;
 
     if (target?.name === level.name) {
       btn.classList.remove("btn-outline-accent");

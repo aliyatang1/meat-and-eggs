@@ -417,3 +417,10 @@ body {
   object-fit: contain;
   pointer-events: none;
 }
+
+.egg-button-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem; /* adjust spacing as needed */
+  margin-top: 1rem;
+}

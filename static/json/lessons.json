@@ -44,7 +44,6 @@
         "content": [
           {
             "style": "Sunny Side Up",
-            "heat": "Medium-Low",
             "time": "2–3 minutes",
             "flip": "No",
             "description": "Whites set; yolk runny. Whites turn from clear to solid white.",
@@ -52,7 +51,6 @@
           },
           {
             "style": "Over Easy",
-            "heat": "Medium",
             "time": "2 minutes one side, 30–60s after flip",
             "flip": "Yes",
             "description": "Whites set; yolk runny. Flip when whites are opaque.",
@@ -60,7 +58,6 @@
           },
           {
             "style": "Over Medium",
-            "heat": "Medium",
             "time": "2 minutes per side",
             "flip": "Yes",
             "description": "Whites set; yolk partially set/jammy.",
@@ -68,7 +65,6 @@
           },
           {
             "style": "Over Hard",
-            "heat": "Medium",
             "time": "2–3 minutes per side",
             "flip": "Yes",
             "description": "Whites and yolks firm. Browning appears on whites.",
