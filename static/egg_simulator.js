@@ -90,6 +90,26 @@ document.addEventListener("DOMContentLoaded", () => {
     _isCooking = false;
   }
 
+  function getCurrentDonenessStage(aTime, bTime, hasBeenFlipped) {
+    const inRange = (actual, min) => actual >= min && actual <= min + 20;
+  
+    if (!hasBeenFlipped) {
+      if (inRange(aTime, 180)) return "Sunny Side Up";
+      return "Raw";
+    }
+  
+    const easyA = inRange(aTime, 120) && inRange(bTime, 30, 10);
+    const easyB = inRange(bTime, 120) && inRange(aTime, 30, 10);
+  
+    if (easyA || easyB) return "Over Easy";
+  
+    if (inRange(aTime, 120) && inRange(bTime, 120)) return "Over Medium";
+  
+    if (inRange(aTime, 180) && inRange(bTime, 180)) return "Over Hard";
+  
+    return "Raw";
+  }
+    
   const donenessLevels = [
     {
       name: "Sunny Side Up",
@@ -286,31 +306,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       
 // Track and update egg doneness stage without regressing
-const newStage = (() => {
-  if (!hasBeenFlipped) {
-    if (sideATime >= 160) return "eggsim-sunny.png";
-    return "eggsim-raw.png";
-  }
+const newState = getCurrentDonenessStage(sideATime, sideBTime, hasBeenFlipped);
 
-  const inRange = (actual, target, leeway) =>
-    actual >= (target - leeway) && actual <= (target + leeway);
+const newStageMap = {
+  "Raw": "eggsim-raw.png",
+  "Sunny Side Up": "eggsim-sunny.png",
+  "Over Easy": "eggsim-overeasy.png",
+  "Over Medium": "eggsim-overmedium.png",
+  "Over Hard": "eggsim-overhard.png"
+};
 
-  const isOverEasy =
-    (inRange(sideATime, 120, 20) && inRange(sideBTime, 30, 10)) ||
-    (inRange(sideBTime, 120, 20) && inRange(sideATime, 30, 10));
-
-  const isOverMedium =
-    inRange(sideATime, 120, 20) && inRange(sideBTime, 120, 20);
-
-  const isOverHard =
-    inRange(sideATime, 180, 20) && inRange(sideBTime, 180, 20);
-
-  if (isOverHard) return "eggsim-overhard.png";
-  if (isOverMedium) return "eggsim-overmedium.png";
-  if (isOverEasy) return "eggsim-overeasy.png";
-
-  return currentEggStage; // fallback: keep current image
-})();
+const newStage = newStageMap[newState];
 
 if (newStage !== currentEggStage) {
   currentEggStage = newStage;
@@ -352,15 +358,7 @@ if (newStage !== currentEggStage) {
           quizBtn.style.display = "inline-block";
         }
       } else {
-        const actualState = eggImage.src.includes("overhard")
-          ? "Over Hard"
-          : eggImage.src.includes("overmedium")
-          ? "Over Medium"
-          : eggImage.src.includes("overeasy")
-          ? "Over Easy"
-          : eggImage.src.includes("sunny")
-          ? "Sunny Side Up"
-          : "Raw";
+        const actualState = getCurrentDonenessStage(sideATime, sideBTime, hasBeenFlipped);
       
         resultText = "You cracked under pressure 🫠<br><br>";
         resultText += `Looks like this egg is <strong>${actualState}</strong>.<br><br>`;
