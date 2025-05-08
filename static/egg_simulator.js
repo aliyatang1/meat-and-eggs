@@ -57,6 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const timerSideA = document.getElementById("timerSideA");
   const timerSideB = document.getElementById("timerSideB");
 
+  let currentEggStage = "eggsim-raw.png";
+
+
   function resetSimulator() {
     eggImage.src = "/static/images/eggsim-raw.png";
     resultContainer.style.display = "none";
@@ -178,6 +181,34 @@ document.addEventListener("DOMContentLoaded", () => {
     return false;
   }
 
+  function getProgressiveDonenessImage(aTime, bTime, hasBeenFlipped) {
+    if (!hasBeenFlipped) {
+      if (aTime >= 160) return "eggsim-sunny.png"; // Sunny side up threshold
+      return "eggsim-raw.png";
+    }
+  
+    const inRange = (actual, target, leeway = 20) =>
+      actual >= (target - leeway) && actual <= (target + leeway);
+  
+    const isOverEasy =
+      (inRange(aTime, 120) && inRange(bTime, 30, 10)) ||
+      (inRange(bTime, 120) && inRange(aTime, 30, 10));
+  
+    const isOverMedium =
+      inRange(aTime, 120) && inRange(bTime, 120);
+  
+    const isOverHard =
+      inRange(aTime, 180) && inRange(bTime, 180);
+  
+    // Order matters: show most advanced image reached so far
+    if (isOverHard) return "eggsim-overhard.png";
+    if (isOverMedium) return "eggsim-overmedium.png";
+    if (isOverEasy) return "eggsim-overeasy.png";
+  
+    return "eggsim-raw.png"; // default if nothing matches
+  }
+  
+
   const isCooking = () => _isCooking;
 
   target = donenessLevels[0];
@@ -254,10 +285,39 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
       
-        // ✅ Improved: Only update image if egg was cooked correctly
-        if (isCorrectlyCooked(target, sideATime, sideBTime, hasBeenFlipped)) {
-          eggImage.src = `/static/images/${target.img}`;
-        }                          
+// Track and update egg doneness stage without regressing
+const newStage = (() => {
+  if (!hasBeenFlipped) {
+    if (sideATime >= 160) return "eggsim-sunny.png";
+    return "eggsim-raw.png";
+  }
+
+  const inRange = (actual, target, leeway) =>
+    actual >= (target - leeway) && actual <= (target + leeway);
+
+  const isOverEasy =
+    (inRange(sideATime, 120, 20) && inRange(sideBTime, 30, 10)) ||
+    (inRange(sideBTime, 120, 20) && inRange(sideATime, 30, 10));
+
+  const isOverMedium =
+    inRange(sideATime, 120, 20) && inRange(sideBTime, 120, 20);
+
+  const isOverHard =
+    inRange(sideATime, 180, 20) && inRange(sideBTime, 180, 20);
+
+  if (isOverHard) return "eggsim-overhard.png";
+  if (isOverMedium) return "eggsim-overmedium.png";
+  if (isOverEasy) return "eggsim-overeasy.png";
+
+  return currentEggStage; // fallback: keep current image
+})();
+
+if (newStage !== currentEggStage) {
+  currentEggStage = newStage;
+  eggImage.src = `/static/images/${newStage}`;
+}
+
+                                
       }, 1000);          
     } else {
       clearInterval(interval);
@@ -292,21 +352,31 @@ document.addEventListener("DOMContentLoaded", () => {
           quizBtn.style.display = "inline-block";
         }
       } else {
+        const actualState = eggImage.src.includes("overhard")
+          ? "Over Hard"
+          : eggImage.src.includes("overmedium")
+          ? "Over Medium"
+          : eggImage.src.includes("overeasy")
+          ? "Over Easy"
+          : eggImage.src.includes("sunny")
+          ? "Sunny Side Up"
+          : "Raw";
+      
         resultText = "You cracked under pressure 🫠<br><br>";
+        resultText += `Looks like this egg is <strong>${actualState}</strong>.<br><br>`;
       
         let cookTimeText = "";
         if (target.name === "Sunny Side Up") {
-          cookTimeText = `about ${Math.round(target.sideASeconds / 60)} minutes on one side`;
+          cookTimeText = "about 3 minutes on one side";
         } else if (target.name === "Over Easy") {
-          cookTimeText = `about 2 minutes on one side and 30–60 seconds on the other`;
+          cookTimeText = "about 2 minutes on one side and 30–60 seconds on the other";
         } else if (target.name === "Over Medium") {
-          cookTimeText = `about 2 minutes per side`;
+          cookTimeText = "about 2 minutes per side";
         } else if (target.name === "Over Hard") {
-          cookTimeText = `about 2–3 minutes per side`;
+          cookTimeText = "about 2–3 minutes per side";
         }
       
-        resultText += `A proper ${target.name} egg should be cooked for ${cookTimeText}.<br><br>`;
-        resultText += `Key features: ${target.desc.toLowerCase()}`;
+        resultText += `A proper <strong>${target.name}</strong> egg should be cooked for ${cookTimeText}. Key features include: ${target.desc.toLowerCase()}</div>`;
       
         resultMsg.innerHTML = resultText;
         resultContainer.style.display = "block";
@@ -318,7 +388,8 @@ document.addEventListener("DOMContentLoaded", () => {
           actionBtn.style.display = "inline-block";
           actionBtn.disabled = false;
         };
-      }      
+      }
+      
 
       renderDonenessButtons(donenessLevels, donenessButtonsContainer, isCooking, targetLabel);
       resultMsg.innerHTML = resultText;

@@ -395,18 +395,6 @@ body {
   content: " ✅";
 }
 
-
-/* egg simulator styling */
-/* .egg-img {
-  position: absolute;
-  top: 60%;
-  left: 35%;
-  transform: translate(-50%, -50%);
-  width: 50%;
-  height: auto;
-  pointer-events: none;
-} */
-
 .egg-img {
   position: absolute;
   top: 60%;
