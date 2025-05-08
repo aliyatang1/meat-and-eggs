@@ -115,8 +115,8 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "Sunny Side Up",
       img: "eggsim-sunny.png",
       desc: "Whites set, yolk runny.",
-      sideASeconds: 120,       // Acceptable from 2:00...
-      sideAMaxSeconds: 180,    // ...to 3:00
+      sideASeconds: 120,
+      sideAMaxSeconds: 200,
       sideBSeconds: 0
     },    
     {
@@ -277,8 +277,8 @@ document.addEventListener("DOMContentLoaded", () => {
       interval = setInterval(() => {
         if (
           elapsedSeconds >= burntTime ||
-          (target.name === "Sunny Side Up" && !hasBeenFlipped && sideATime > 240)
-        ) {
+          (target.name === "Sunny Side Up" && !hasBeenFlipped && sideATime > 200)
+        )         {
           eggImage.src = "/static/images/steaksim-burnt.png";
           clearInterval(interval);
           clearInterval(timerInterval);
@@ -297,10 +297,18 @@ document.addEventListener("DOMContentLoaded", () => {
           playAgainBtn.textContent = "Try Again";
           playAgainBtn.style.display = "inline-block";
           playAgainBtn.onclick = () => {
+            clearInterval(interval);
+            clearInterval(timerInterval);
+            _isCooking = false; // reset cooking flag manually
+            currentEggStage = "eggsim-raw.png"; // reset stage tracking
+            eggImage.src = `/static/images/${currentEggStage}`;
             resetSimulator();
-            actionBtn.style.display = "inline-block";
-            actionBtn.disabled = false;
+          
+            setTimeout(() => {
+              actionBtn.click(); // auto-start the next round
+            }, 100);
           };
+          
           _isCooking = false;
           return;
         }
