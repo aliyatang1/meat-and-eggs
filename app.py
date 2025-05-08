@@ -69,14 +69,15 @@ def quiz(topic, question_id):
     question = quiz_data.get(qid_str)
 
     # Inject user's answer if it exists
-    current_answer = session['quiz_answers'][topic].get(qid_str, None)
+    current_answer = session.get('quiz_answers', {}).get(topic, {}).get(qid_str, '')
 
     return render_template('quiz.html',
-                           topic=topic,
-                           question_id=question_id,
-                           question=question,
-                           total_questions=total_questions,
-                           current_answer=current_answer)
+        topic=topic,
+        question_id=question_id,
+        question=question,
+        total_questions=len(quiz_data),
+        current_answer=current_answer
+    )
 
 
 @app.route('/submit_answer', methods=['POST'])

@@ -19,17 +19,28 @@
     </div>
     <div class="options" id="options-container">
         {% for option in question.options %}
-    <button class="option-btn"
-            data-option="{{ option }}"
+        {% set is_selected = (current_answer == option) %}
+        {% set is_correct = (option == question.correct_answer) %}
+        
+        <button
+          class="option-btn
             {% if current_answer %}
-                disabled
-                class="option-btn {% if option == current_answer and option == question.correct_answer %}correct{% elif option == current_answer and option != question.correct_answer %}incorrect{% endif %}"
-            {% else %}
-                onclick="selectAnswer('{{ option }}')"
-            {% endif %}>
-        {{ option }}
-    </button>
+              {% if is_selected and is_correct %} correct
+              {% elif is_selected and not is_correct %} incorrect
+              {% endif %}
+            {% endif %}"
+          data-option="{{ option }}"
+          {% if not current_answer %}
+            onclick="selectAnswer('{{ option }}')"
+          {% else %}
+            disabled
+          {% endif %}
+        >
+          {{ option }}
+        </button>
+        
 {% endfor %}
+
 
     </div>
     <div id="feedback-container" class="feedback-container"></div>
