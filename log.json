@@ -70,6 +70,41 @@
             "user_answer": "5\u20136 minutes",
             "correct": true,
             "timestamp": "2025-05-08T18:56:47.729383"
+        },
+        {
+            "topic": "eggs",
+            "question_id": "1",
+            "user_answer": "Sunny Side Up",
+            "correct": true,
+            "timestamp": "2025-05-08T20:17:17.393214"
+        },
+        {
+            "topic": "eggs",
+            "question_id": "2",
+            "user_answer": "Over Hard",
+            "correct": true,
+            "timestamp": "2025-05-08T20:17:24.972898"
+        },
+        {
+            "topic": "eggs",
+            "question_id": "3",
+            "user_answer": "When the whites are still runny",
+            "correct": false,
+            "timestamp": "2025-05-08T20:17:39.504234"
+        },
+        {
+            "topic": "eggs",
+            "question_id": "4",
+            "user_answer": "2 minutes",
+            "correct": true,
+            "timestamp": "2025-05-08T20:17:51.174340"
+        },
+        {
+            "topic": "eggs",
+            "question_id": "5",
+            "user_answer": "Set whites and jammy yolk",
+            "correct": true,
+            "timestamp": "2025-05-08T20:18:02.120481"
         }
     ],
     "simulator_actions": []

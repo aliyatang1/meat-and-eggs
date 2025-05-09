@@ -61,7 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function resetSimulator() {
-    eggImage.src = "/static/images/eggsim-raw.png";
+    currentEggStage = "eggsim-raw.png"; // 🔧 Reset tracking for progression
+    eggImage.src = "/static/images/eggsim-raw.png";  
     resultContainer.style.display = "none";
 
     actionBtn.style.display = "inline-block";
@@ -91,24 +92,22 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getCurrentDonenessStage(aTime, bTime, hasBeenFlipped) {
-    const inRange = (actual, min) => actual >= min && actual <= min + 20;
+    const inRange = (actual, min, max) => actual >= min && actual <= max;
   
     if (!hasBeenFlipped) {
-      if (inRange(aTime, 120, 0)) return "Sunny Side Up"; // Show image exactly at 2:00
+      if (inRange(aTime, 120, 180)) return "Sunny Side Up";
       return "Raw";
-    }    
+    }
   
-    const easyA = inRange(aTime, 120) && inRange(bTime, 30, 10);
-    const easyB = inRange(bTime, 120) && inRange(aTime, 30, 10);
+    if (inRange(aTime, 100, 140) && inRange(bTime, 100, 140)) return "Over Medium";
+    if (inRange(aTime, 120, 180) && inRange(bTime, 120, 180)) return "Over Hard";    
   
+    const easyA = inRange(aTime, 100, 140) && inRange(bTime, 20, 40);
+    const easyB = inRange(bTime, 100, 140) && inRange(aTime, 20, 40);
     if (easyA || easyB) return "Over Easy";
   
-    if (inRange(aTime, 120) && inRange(bTime, 120)) return "Over Medium";
-  
-    if (inRange(aTime, 180) && inRange(bTime, 180)) return "Over Hard";
-  
     return "Raw";
-  }
+  }  
     
   const donenessLevels = [
     {
@@ -202,31 +201,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getProgressiveDonenessImage(aTime, bTime, hasBeenFlipped) {
+    const inRange = (actual, min, max) => actual >= min && actual <= max;
+  
     if (!hasBeenFlipped) {
-      if (aTime >= 160) return "eggsim-sunny.png"; // Sunny side up threshold
+      if (inRange(aTime, 120, 180)) return "eggsim-sunny.png";  // Show sunny between 2–3min
       return "eggsim-raw.png";
     }
   
-    const inRange = (actual, target, leeway = 20) =>
-      actual >= (target - leeway) && actual <= (target + leeway);
+    // Over Hard (final stage)
+    if (inRange(aTime, 120, 180) && inRange(bTime, 120, 180)) return "eggsim-overhard.png";
   
-    const isOverEasy =
-      (inRange(aTime, 120) && inRange(bTime, 30, 10)) ||
-      (inRange(bTime, 120) && inRange(aTime, 30, 10));
+    // Over Medium
+    if (inRange(aTime, 100, 140) && inRange(bTime, 100, 140)) return "eggsim-overmedium.png";
   
-    const isOverMedium =
-      inRange(aTime, 120) && inRange(bTime, 120);
+    // Over Easy (shorter wiggle room on the short side)
+    const easyA = inRange(aTime, 100, 140) && inRange(bTime, 20, 40);
+    const easyB = inRange(bTime, 100, 140) && inRange(aTime, 20, 40);
+    if (easyA || easyB) return "eggsim-overeasy.png";
   
-    const isOverHard =
-      inRange(aTime, 180) && inRange(bTime, 180);
-  
-    // Order matters: show most advanced image reached so far
-    if (isOverHard) return "eggsim-overhard.png";
-    if (isOverMedium) return "eggsim-overmedium.png";
-    if (isOverEasy) return "eggsim-overeasy.png";
-  
-    return "eggsim-raw.png"; // default if nothing matches
-  }
+    return "eggsim-raw.png";
+  }  
   
 
   const isCooking = () => _isCooking;
@@ -260,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
           sideATime += simulatedSecondsPerTick;
         } else {
           sideBTime += simulatedSecondsPerTick;
-        }
+        }        
 
         const totalMinutes = Math.floor(elapsedSeconds / 60);
         const totalSeconds = elapsedSeconds % 60;
@@ -416,8 +410,14 @@ if (stageOrder.indexOf(newStage) > stageOrder.indexOf(currentEggStage)) {
 
   flipBtn.addEventListener("click", () => {
     console.log('some message');
-    currentSide = currentSide === 'A' ? 'B' : 'A';
-    hasBeenFlipped = true;
+    if (currentSide === 'A') {
+      sideATime += simulatedSecondsPerTick; // record last tick's time on A
+      currentSide = 'B';
+    } else {
+      sideBTime += simulatedSecondsPerTick; // record last tick's time on B
+      currentSide = 'A';
+    }
+    hasBeenFlipped = true;    
   
     const egg = document.getElementById("eggImage");
     egg.classList.toggle("egg-flipped");
